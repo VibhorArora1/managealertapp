@@ -1,0 +1,17 @@
+/* Enter your custom styles here */
+
+.highlightedTextRed {
+  color: red; /* Set the desired text color for highlighting */
+  /* background-color: yellow;  */
+  /* Uncomment if you want to set background color */
+}
+.highlightedTextYellow {
+  color: rgb(215, 215, 8); /* Set the desired text color for highlighting */
+  /* background-color: yellow;  */
+  /* Uncomment if you want to set background color */
+}
+.highlightedTextGreen {
+  color: green; /* Set the desired text color for highlighting */
+  /* background-color: yellow;  */
+  /* Uncomment if you want to set background color */
+}
