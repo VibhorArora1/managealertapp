@@ -28,6 +28,86 @@ sap.ui.controller("copilot.copilot", {
         });
 
     },
+    generateGUID: function () {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-4' + s4().substr(0, 3) + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    },
+
+    getConnetion: async function () {
+        var that = this;
+        this.getOwnerComponent()._guid = this.generateGUID();
+        this.getOwnerComponent()._guid1 = this.generateGUID();
+        $.ajax({
+            url: "https://www.bingapis.com/api/v1/chat/create",
+            type: "GET",
+            data: {
+                appid: "43B4D75BDEB98FC28A3AF5A8C3D2F430A64F3A0C",
+                pid: this.getOwnerComponent()._guid
+            },
+            success: function (response) {
+                console.log(response);
+                that.getOwnerComponent()._response = response;
+                const connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+                    skipNegotiation: true,
+                    transport: 1,
+                    // Specify the allowed origin
+                    withCredentials: false
+                })
+                .withAutomaticReconnect()
+                .build();
+                connection.logging = true;
+                const initialMessage = {
+                    // source: "BingApiTest",
+                    // allowedMessageTypes: DEFAULT_ALLOWED_MESSAGE_TYPES,
+                    source: "BingApiProd",
+                    isStartOfSession: true,
+                    requestId: that.getOwnerComponent()._guid,
+                    conversationSignature: that.getOwnerComponent()._response.conversationSignature,
+                    conversationId: that.getOwnerComponent()._response.conversationId,
+                    participant: { id: that.getOwnerComponent()._response.participantId },
+                    message: {
+                        text: "Tell me about SAP?",
+                        author: "user",
+                        inputMethod: "Keyboard",
+                        requestId: that.getOwnerComponent()._guid,
+                        messageId: that.getOwnerComponent()._guid1,
+                        market: "en-US",
+                        MessageType: "Chat"
+                    },
+                    optionSets: ['stream_writes', 'flux_prompt_v1'],
+                };
+                 connection.on("send", initialMessage => {
+                    console.log(initialMessage);
+                });
+                
+                connection.start().then(function () {
+                    console.log("Connected!");
+                    connection.stream("Chat", initialMessage).subscribe({
+                        complete: () => {
+                            connection.stop()
+                        },
+                        next: function (response) {
+                            console.log("Received message:", response);
+                            // for (var message of response.messages) {
+                                console.log("Received message:", message);
+                            // }
+                        },
+                        error: (err) => {
+                            console.error("Error:", err);
+
+                        }
+                    });
+                });
+
+            }
+        });
+    },
 
     onListItemPress: function (oEvent) {
         var oView = this.getView();
