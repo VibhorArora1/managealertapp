@@ -124,6 +124,7 @@ sap.ui.controller("copilot.copilot", {
             oView.getModel("pf10").setData(null);
         }
 
+        this.getConnetion();
 
 
         // Get the Path
