@@ -224,7 +224,7 @@
 	</l:VerticalLayout>
 
 
-   <smartForm:SmartForm id="smartFormSearch" editable="false" layout="ResponsiveGridLayout" columnsL="1" columnsM="1" visible="false">
+   <smartForm:SmartForm id="smartFormSearch" editable="false" layout="ResponsiveGridLayout" title="Pre-defined Answer" columnsXL="10"  visible="false">
     
   </smartForm:SmartForm> 
               </content>
