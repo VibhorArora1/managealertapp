@@ -5,7 +5,6 @@ sap.ui.controller("copilot.copilot", {
      * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
      * @memberOf alertinfo.Alert_Info
      */
-
     onInit: function () {
 
         var oTable = this.getView().byId("OwnershipTableId");
@@ -32,95 +31,29 @@ sap.ui.controller("copilot.copilot", {
         var oData = {
             Model1: [
                 {
-                    Question: "What is the capital of India?",
-                    Answer: "Delhi"
+                    Question: "Does company ОАО АСБ Беларусбанк, asgd_V5_12561, Belarus exist",
+                    Answer: "According to the web search results, ОАО “АСБ Беларусбанк” is the name of the largest bank in Belarus, which offers a wide range of banking products and services to individuals, corporate clients, and financial institutions1. The bank’s legal name is Открытое акционерное общество Сберегательный банк “Беларусбанк (Open Joint Stock Company Savings Bank Belarusbank)2. The bank’s SWIFT code is AKBBBY2X2. The bank’s website is belarusbank.by."
                 },
                 {
-                    Question: "What is the capital of UK?",
-                    Answer: "London"
+                    Question: "Does addess  asgd_V5_12561, Belarus exist",
+                    Answer: "I’m sorry, but I could not find any information about the address asgd_V5_12561, Belarus in the web search results. This address does not seem to be a valid format for a location in Belarus. The usual format for an address in Belarus consists of the following elements1"
                 },
                 {
-                    Question: "is company Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia same as ООО Успех Russia?",
-                    Answer: "No, the company Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia is not the same as ООО Успех Russia. According to the web search results, the first company is a regional center for identifying and supporting gifted children, while the second company is a flour and grain exporter. They have different websites, addresses, and activities. You can find more information about them by following the links below:"
+                    Question: "what is the tax number of Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia",
+                    Answer: "According to the web search results, the tax number of Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia is 4632014030"
                 },
                 {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
+                    Question: "is this valid phone number +48507863777",
+                    Answer: "According to the web search results, +48507863777 is a valid phone number in Poland."
                 }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
+                    Question: "is this valid company registration number 1182046214 in poland?",
+                    Answer: "is this valid company registration number 1182046214 in poland"
                 }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
+                    Question: "Is this valide web address www.ilmarinen.no",
+                    Answer: "Ilmarinen Explore No, www.ilmarinen.no is not a valid web address. It does not exist and cannot be accessed. However, www.ilmarinen.fi is a valid web address. It is the website of Ilmarinen, a Finnish company that provides pension insurance and services1"
                 }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
-                }, {
-                    Question: "What is the capital of France?",
-                    Answer: "Paris"
+                    Question: "what company owns tax number 4629030222 in russia",
+                    Answer: "Using this tool, I found that the company that owns the tax number 4629030222 in Russia is OOO “SIBIRSKAYA ZHELEZNAYA DOROGA” (Limited Liability Company “Siberian Railway”). The company is located in Novosibirsk, and its main activity is railway passenger transport. The company was registered on December 29, 20032."
                 }
             ]
         };
@@ -279,7 +212,7 @@ sap.ui.controller("copilot.copilot", {
 
         // Create IconTabFilters
         var oIconTabBar = this.byId("idIconTabBar");
-        if (oIconTabBar.getItems().length === 1) {
+        if (oIconTabBar.getItems().length === 3) {
             this.createIconTabFilters(oIconTabBar, "Sanctions", "Sanction information", "sap-icon://bullet-text");
         }
         this.oBusy.open();
@@ -1303,6 +1236,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn1").setVisible(true);
             this.getView().byId("_IDGenFeedInput1").setVisible(true);
             this.getView().byId("_IDGenList1").setVisible(true);
+            this.getView().byId("smartFormColumn2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput2").setVisible(false);
+            this.getView().byId("_IDGenList2").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(true);
         }
         if (sKey === "Summary") {
@@ -1315,6 +1251,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn1").setVisible(false);
             this.getView().byId("_IDGenFeedInput1").setVisible(false);
             this.getView().byId("_IDGenList1").setVisible(false);
+            this.getView().byId("smartFormColumn2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput2").setVisible(false);
+            this.getView().byId("_IDGenList2").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
         if (sKey === "Match") {
@@ -1327,6 +1266,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("idVerticalLayoutSanction").setVisible(false);
             this.getView().byId("idVerticalLayoutOwnership").setVisible(false);
             this.getView().byId("_IDGenList1").setVisible(false);
+            this.getView().byId("smartFormColumn2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput2").setVisible(false);
+            this.getView().byId("_IDGenList2").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
 
         }
@@ -1341,6 +1283,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("idVerticalLayoutSanction").setVisible(false);
             this.getView().byId("idVerticalLayoutOwnership").setVisible(false);
             this.getView().byId("_IDGenList1").setVisible(false);
+            this.getView().byId("smartFormColumn2").setVisible(true);
+            this.getView().byId("_IDGenFeedInput2").setVisible(true);
+            this.getView().byId("_IDGenList2").setVisible(true);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
 
