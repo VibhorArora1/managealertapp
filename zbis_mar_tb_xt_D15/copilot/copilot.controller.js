@@ -1294,7 +1294,7 @@ sap.ui.controller("copilot.copilot", {
     onFilterSelect: function (oEvent) {
         var sKey = oEvent.getParameter("key");
         if (sKey === "Sanctions") {
-
+            this.getView().byId("smartFormSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(true);
             this.getView().byId("OwnershipTableId").setVisible(true);
@@ -1306,6 +1306,7 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("sanctionTabVerticalID").setVisible(true);
         }
         if (sKey === "Summary") {
+            this.getView().byId("smartFormSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
@@ -1317,6 +1318,7 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
         if (sKey === "Match") {
+            this.getView().byId("smartFormSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(true);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
@@ -1330,6 +1332,7 @@ sap.ui.controller("copilot.copilot", {
         }
 
         if(sKey === "OpenSearch"){
+            this.getView().byId("smartFormSearch").setVisible(true);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
