@@ -5,7 +5,8 @@
          <IconTabBar id="idIconTabBar" select=".onFilterSelect" class="sapUiResponsiveContentPadding">
             <items>
                <IconTabFilter id="confirmId" icon="sap-icon://begin" design="Horizontal" text="Confirm Ok" key="Match" />
-               <IconTabFilter id="bingId" icon="sap-icon://search" design="Horizontal" text="Open Search" key="OpenSearch" />
+               <IconTabSeparator />
+               <IconTabFilter id="bingId" icon="sap-icon://search" design="Horizontal" text="Open Search" key="OpenSearch" visible="true"/>
             </items>
             <content>
                <Table id="smartTable" items="{pf2>/}" headerText="Match Entities" showSeparators="Inner" selectionChange="onSelectionChange">

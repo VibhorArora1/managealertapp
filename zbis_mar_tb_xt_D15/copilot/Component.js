@@ -73,6 +73,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("idVerticalLayoutOwnership").setVisible(false);
 							view.byId("_IDGenList1").setVisible(false);
 							view.byId("sanctionTabVerticalID").setVisible(false);
+							this.getView().byId("smartFormSearch").setVisible(false);
 							var oIconTabBar = view.byId("idIconTabBar");
 							if (oIconTabBar) {
 								oIconTabBar.removeItem(oIconTabBar.getItems()[1]);
