@@ -1236,6 +1236,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn1").setVisible(true);
             this.getView().byId("_IDGenFeedInput1").setVisible(true);
             this.getView().byId("_IDGenList1").setVisible(true);
+            this.getView().byId("smartFormColumn2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput2").setVisible(false);
+            this.getView().byId("_IDGenList2").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(true);
         }
         if (sKey === "Summary") {
@@ -1248,6 +1251,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn1").setVisible(false);
             this.getView().byId("_IDGenFeedInput1").setVisible(false);
             this.getView().byId("_IDGenList1").setVisible(false);
+            this.getView().byId("smartFormColumn2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput2").setVisible(false);
+            this.getView().byId("_IDGenList2").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
         if (sKey === "Match") {
@@ -1260,6 +1266,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("idVerticalLayoutSanction").setVisible(false);
             this.getView().byId("idVerticalLayoutOwnership").setVisible(false);
             this.getView().byId("_IDGenList1").setVisible(false);
+            this.getView().byId("smartFormColumn2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput2").setVisible(false);
+            this.getView().byId("_IDGenList2").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
 
         }
@@ -1274,6 +1283,9 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("idVerticalLayoutSanction").setVisible(false);
             this.getView().byId("idVerticalLayoutOwnership").setVisible(false);
             this.getView().byId("_IDGenList1").setVisible(false);
+            this.getView().byId("smartFormColumn2").setVisible(true);
+            this.getView().byId("_IDGenFeedInput2").setVisible(true);
+            this.getView().byId("_IDGenList2").setVisible(true);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
 

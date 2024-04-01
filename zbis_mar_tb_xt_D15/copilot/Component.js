@@ -69,6 +69,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("OwnershipTableId").setVisible(false);
 							view.byId("smartFormColumn1").setVisible(false);
 							view.byId("_IDGenFeedInput1").setVisible(false);
+							view.byId("_IDGenList1").setVisible(false);
+							view.byId("smartFormColumn2").setVisible(false);
+							view.byId("_IDGenFeedInput2").setVisible(false);
 							view.byId("idVerticalLayoutSanction").setVisible(false);
 							view.byId("idVerticalLayoutOwnership").setVisible(false);
 							view.byId("_IDGenList1").setVisible(false);
