@@ -76,8 +76,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("smartFormSearch").setVisible(false);
 							var oIconTabBar = view.byId("idIconTabBar");
 							if (oIconTabBar) {
-								oIconTabBar.removeItem(oIconTabBar.getItems()[1]);
-								oIconTabBar.removeItem(oIconTabBar.getItems()[1]);
+								// oIconTabBar.removeItem(oIconTabBar.getItems()[1]);
+								// oIconTabBar.removeItem(oIconTabBar.getItems()[1]);
 								oIconTabBar.setSelectedKey("Match");
 							}
 							//Grab an instance of the view, and set data retrieved to its default model.
