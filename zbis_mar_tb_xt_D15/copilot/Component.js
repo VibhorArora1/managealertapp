@@ -76,9 +76,11 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("smartFormSearch").setVisible(false);
 							var oIconTabBar = view.byId("idIconTabBar");
 							if (oIconTabBar) {
-								// oIconTabBar.removeItem(oIconTabBar.getItems()[1]);
-								// oIconTabBar.removeItem(oIconTabBar.getItems()[1]);
-								oIconTabBar.setSelectedKey("Match");
+								
+									oIconTabBar.removeItem(oIconTabBar.getItems()[3]);
+									oIconTabBar.removeItem(oIconTabBar.getItems()[3]);
+									oIconTabBar.setSelectedKey("Match");
+								
 							}
 							//Grab an instance of the view, and set data retrieved to its default model.
 
@@ -136,7 +138,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 											for (var i = 0; i < data.to_AlertOrgAddressV2.results.length; i++) {
 												if (data.to_AlertOrgAddressV2.results[i].AlertItemNumber === 1) {
 													if (data.to_AlertOrgAddressV2.results[i].CustomerType === "ZC") {
-														for (var j = i - 1; j >= 0; j--) { 
+														for (var j = i - 1; j >= 0; j--) {
 															if (data.to_AlertOrgAddressV2.results[j].CustomerType === "ZB") {
 																i = j;
 																break;
