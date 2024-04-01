@@ -9,6 +9,8 @@ sap.ui.controller("copilot.copilot", {
 
         var oTable = this.getView().byId("OwnershipTableId");
 
+        
+
         oTable.attachUpdateFinished(function (oEvent) {
             // Your custom logic here
             var oItems = oTable.getItems();
@@ -25,6 +27,145 @@ sap.ui.controller("copilot.copilot", {
             //     }
             // }
         });
+
+        var oData = {
+            Model1: [
+                {
+                    Question: "What is the capital of India?",
+                    Answer: "Delhi"
+                },
+                {
+                    Question: "What is the capital of UK?",
+                    Answer: "London"
+                },
+                {
+                    Question: "is company Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia same as ООО Успех Russia?",
+                    Answer: "No, the company Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia is not the same as ООО Успех Russia. According to the web search results, the first company is a regional center for identifying and supporting gifted children, while the second company is a flour and grain exporter. They have different websites, addresses, and activities. You can find more information about them by following the links below:"
+                },
+                {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }, {
+                    Question: "What is the capital of France?",
+                    Answer: "Paris"
+                }
+            ]
+        };
+
+        var oModel = new sap.ui.model.json.JSONModel(oData);
+                this.getView().setModel(oModel, "Model1");
+                var oSmartForm = this.getView().byId("smartFormSearch");
+                var oSmartFormlayout = new sap.ui.comp.smartform.Layout({
+                });
+                // Create a Group control
+                var int = oModel.getData().Model1.length / 2;
+                var final = parseInt(int) + 1;
+
+                var index = 0;
+                var that = this;
+               
+                oModel.getData().Model1.forEach(function (obj) {        
+                    index++;
+                    if (index === 1) {
+                        
+                        var oGroup = new sap.ui.comp.smartform.Group({
+                            // label: obj.Question
+                        });         
+                        oSmartForm.addGroup(oGroup);
+                        that._group = oGroup;
+                    }else{
+                        oGroup  = that._group;
+                    }
+                    if(index === final){
+                        index = 0;
+                    }
+
+                    // Add the Group to the SmartForm
+                    
+                    
+                    var oGroupElement = new sap.ui.comp.smartform.GroupElement({
+                        elements: [
+                        ]
+                    });
+                    var oText = new sap.m.Text({ text: obj.Question + ":", editable: false });
+                    var oText1 = new sap.m.Text({ text: obj.Answer, editable: false });
+                    oGroupElement.addElement(oText);
+                    oGroupElement.addElement(oText1);
+                    oGroup.addGroupElement(oGroupElement);
+                });
+
 
     },
     generateGUID: function () {
@@ -1152,7 +1293,7 @@ sap.ui.controller("copilot.copilot", {
     onFilterSelect: function (oEvent) {
         var sKey = oEvent.getParameter("key");
         if (sKey === "Sanctions") {
-
+            this.getView().byId("smartFormSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(true);
             this.getView().byId("OwnershipTableId").setVisible(true);
@@ -1164,6 +1305,7 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("sanctionTabVerticalID").setVisible(true);
         }
         if (sKey === "Summary") {
+            this.getView().byId("smartFormSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
@@ -1175,6 +1317,7 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
         if (sKey === "Match") {
+            this.getView().byId("smartFormSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(true);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
@@ -1185,6 +1328,19 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("_IDGenList1").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
 
+        }
+
+        if(sKey === "OpenSearch"){
+            this.getView().byId("smartFormSearch").setVisible(true);
+            this.getView().byId("smartTable").setVisible(false);
+            this.getView().byId("smartFormColumn").setVisible(false);
+            this.getView().byId("OwnershipTableId").setVisible(false);
+            this.getView().byId("smartFormColumn1").setVisible(false);
+            this.getView().byId("_IDGenFeedInput1").setVisible(false);
+            this.getView().byId("idVerticalLayoutSanction").setVisible(false);
+            this.getView().byId("idVerticalLayoutOwnership").setVisible(false);
+            this.getView().byId("_IDGenList1").setVisible(false);
+            this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
 
     },
