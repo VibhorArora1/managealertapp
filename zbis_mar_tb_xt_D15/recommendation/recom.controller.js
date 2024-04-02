@@ -5,8 +5,8 @@ sap.ui.controller('recommendation.recom', {
    * @memberOf alertinfo.Alert_Info
    */
   onInit: function () {
-    var oUser = sap.ushell.Container.getUser()
-    var sUserId = oUser.getId()
+    //var oUser = sap.ushell.Container.getUser()
+    //var sUserId = oUser.getId()
     // if (sUserId === "VIBHORARORA" || sUserId === "SNEHAP" || sUserId === "ANANDRAI" || sUserId === "RUMACPAR") {
     // 	this.getView().byId("_IDGenButton1").setVisible(true);
     // } else {
@@ -211,15 +211,14 @@ sap.ui.controller('recommendation.recom', {
         var itemResult = JSON.parse(data.Response)
 
         if (itemResult.type == 'E') {
-          new sap.m.MessageBox.error(itemResult.message)
-          return
+          new sap.m.MessageBox.error(itemResult.message);
         } else if (itemResult.type == 'S') {
-          sap.m.MessageToast.show(itemResult.message)
+          sap.m.MessageToast.show(itemResult.message);
         } else if (itemResult.type == 'W') {
-          MessageBox.warning(itemResult.message)
+          sap.m.MessageBox.warning(itemResult.message);
         }
         // Update Address Hits Status
-        var oModelData = oModel.getData()
+        // var oModelData = oModel.getData()
 
         // Loop through each entry in addHits
         oSelectionPath.forEach(function (path) {
@@ -227,7 +226,7 @@ sap.ui.controller('recommendation.recom', {
           selectedItem.Status = 'Submitted'
         })
         // Refresh the model to reflect the changes
-        oModel.refresh(true)
+        oModel.refresh(true);
       },
       error: function (error) {
         // Handle the error response
