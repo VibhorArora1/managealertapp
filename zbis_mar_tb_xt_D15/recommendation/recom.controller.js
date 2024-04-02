@@ -203,8 +203,8 @@ sap.ui.controller('recommendation.recom', {
       }
     })
 
+    var that = this;
     var finalJSON = finalData[0]
-
     var isMessageBoxCalled = false // Flag variable
 
     // Check if any of the selected items have a status of 'Open'
@@ -224,7 +224,7 @@ sap.ui.controller('recommendation.recom', {
             onClose: function (sAction) {
               if (sAction === sap.m.MessageBox.Action.OK) {
                 // Complete Item
-                this.completeItem(finalJSON, oModel, oSelectionPath)
+                that.completeItem(finalJSON, oModel, oSelectionPath);
               } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
                 return
               }
