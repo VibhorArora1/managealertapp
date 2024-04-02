@@ -236,3 +236,4 @@ sap.ui.controller('recommendation.recom', {
     })
   }
 })
+
