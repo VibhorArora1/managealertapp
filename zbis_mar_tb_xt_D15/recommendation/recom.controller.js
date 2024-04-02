@@ -174,16 +174,16 @@ sap.ui.controller('recommendation.recom', {
       var selectedItem = oModel.getProperty(path)
 
       if (selectedItem.Status == 'Open') {
-        MessageBox.warning(
+        sap.m.MessageBox.warning(
           'There are Open Address Hit which will be Submitted',
           {
-            actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+            actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
             //  emphasizedAction: MessageBox.Action.OK,
             onClose: function (sAction) {
-              if (sAction === MessageBox.Action.OK) {
+              if (sAction === sap.m.MessageBox.Action.OK) {
                 // Complete Item
                 completeItem(finalJSON, oModel, oSelectionPath)
-              } else if (sButton === MessageBox.Action.CANCEL) {
+              } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
                 return
               }
             }.bind(this)

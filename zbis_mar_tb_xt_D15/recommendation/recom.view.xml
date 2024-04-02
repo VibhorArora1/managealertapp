@@ -67,7 +67,7 @@
 						</Column>
 
 		                <Column id="DJNotesColumn">
-							<Text id="_IDGenText20" text="{parts:['i18n>Feedback'], formatter:'.columnTextWithLineBreak'}" />
+							<Text id="_IDGenText20" text="{parts:['i18n>DJNotes'], formatter:'.columnTextWithLineBreak'}" />
 						</Column>
 					</columns>
 					<items>
