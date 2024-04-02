@@ -52,9 +52,9 @@ sap.ui.define(
           objDefaultModel.read(strServicePath, {
             success: function (data) {
               // Check Address Hits are there are not
+              this.oBusy.close();
               debugger;
               if (data.Response.length === 0) {
-                this.oBusy.close();
                 sap.m.MessageToast.show('No Address Hits Found for this AlertID');
                 var oModel = new sap.ui.model.json.JSONModel(null);
                 view.setModel(oModel);
