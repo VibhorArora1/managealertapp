@@ -43,11 +43,11 @@ sap.ui.define(
           });
 
           //Grab an instance of the view, and set data retrieved to its default model.
-          var view = this.oView
-          this.oBusy = new sap.m.BusyDialog()
+          var view = this.oView;
+          this.oBusy = new sap.m.BusyDialog();
 
-          var that = this
-          this.oBusy.open()
+          var that = this;
+          this.oBusy.open();
 
           objDefaultModel.read(strServicePath, {
             success: function (data) {
