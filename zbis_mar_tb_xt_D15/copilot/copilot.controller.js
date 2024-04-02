@@ -127,7 +127,7 @@ sap.ui.controller("copilot.copilot", {
                 console.log(response);
                 that.getOwnerComponent()._response = response;
                 const connection = new signalR.HubConnectionBuilder()
-                .withUrl("https://sydney.bing.com/Sydney/ChatHub", {
+                .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
                     skipNegotiation: true,
                     transport: 1,
                     // Specify the allowed origin
