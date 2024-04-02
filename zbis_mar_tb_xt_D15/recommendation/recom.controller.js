@@ -148,51 +148,7 @@ sap.ui.controller('recommendation.recom', {
       }
     })
   },
-  onCompleteItem: function (oEvent) {
-    var oSelectionPath = oEvent.oSource.oParent.oParent._aSelectedPaths // Get selected paths
-    var oModel = this.getView().getModel('M1')
 
-    const finalData = oSelectionPath.map(path => {
-      const selectedItem = oModel.getProperty(path)
-      return {
-        AlertKey: selectedItem.DBkey,
-        ItemKey: selectedItem.ItemDBkey,
-        Response: ' '
-      }
-    })
-
-    var finalJSON = finalData[0]
-
-    var isMessageBoxCalled = false // Flag variable
-
-    // Check if any of the selected items have a status of 'Open'
-    oSelectionPath.forEach(function (path) {
-      if (isMessageBoxCalled) {
-        return // Exit the forEach loop if MessageBox is already called
-      }
-
-      var selectedItem = oModel.getProperty(path)
-
-      if (selectedItem.Status == 'Open') {
-        sap.m.MessageBox.warning(
-          'There are Open Address Hit which will be Submitted',
-          {
-            actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
-            //  emphasizedAction: MessageBox.Action.OK,
-            onClose: function (sAction) {
-              if (sAction === sap.m.MessageBox.Action.OK) {
-                // Complete Item
-                completeItem(finalJSON, oModel, oSelectionPath)
-              } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
-                return
-              }
-            }.bind(this)
-          }
-        )
-        isMessageBoxCalled = true // Set the flag variable to true
-      }
-    })
-  },
   completeItem: function (finalJSON, oModel, oSelectionPath) {
     // Call the OData service to submit the data
 
@@ -230,6 +186,52 @@ sap.ui.controller('recommendation.recom', {
       },
       error: function (error) {
         // Handle the error response
+      }
+    })
+  },
+
+  onCompleteItem: function (oEvent) {
+    var oSelectionPath = oEvent.oSource.oParent.oParent._aSelectedPaths // Get selected paths
+    var oModel = this.getView().getModel('M1')
+
+    const finalData = oSelectionPath.map(path => {
+      const selectedItem = oModel.getProperty(path)
+      return {
+        AlertKey: selectedItem.DBkey,
+        ItemKey: selectedItem.ItemDBkey,
+        Response: ' '
+      }
+    })
+
+    var finalJSON = finalData[0]
+
+    var isMessageBoxCalled = false // Flag variable
+
+    // Check if any of the selected items have a status of 'Open'
+    oSelectionPath.forEach(function (path) {
+      if (isMessageBoxCalled) {
+        return // Exit the forEach loop if MessageBox is already called
+      }
+
+      var selectedItem = oModel.getProperty(path)
+
+      if (selectedItem.Status == 'Open') {
+        sap.m.MessageBox.warning(
+          'There are open address screening hits for your alerts. Clicking on OK will submit them.',
+          {
+            actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+            //  emphasizedAction: MessageBox.Action.OK,
+            onClose: function (sAction) {
+              if (sAction === sap.m.MessageBox.Action.OK) {
+                // Complete Item
+                this.completeItem(finalJSON, oModel, oSelectionPath)
+              } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
+                return
+              }
+            }.bind(this)
+          }
+        )
+        isMessageBoxCalled = true // Set the flag variable to true
       }
     })
   }
