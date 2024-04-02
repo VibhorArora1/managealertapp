@@ -106,7 +106,7 @@ sap.ui.controller("recommendation.recom", {
 
         var strURL = '/sap/opu/odata/sap/ZBIS_REL_ADDR_HITS_AI_RECOMM_SRV/' //Set up base call URL
 
-        var objModel = new ODataModel(strURL, {
+        var objModel = new sap.ui.model.odata.v2.ODataModel(strURL, {
           json: true,
           useBatch: false
         })
