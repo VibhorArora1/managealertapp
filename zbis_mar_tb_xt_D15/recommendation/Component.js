@@ -43,17 +43,16 @@ sap.ui.define(
           });
 
           //Grab an instance of the view, and set data retrieved to its default model.
-          var view = this.oView
-          this.oBusy = new sap.m.BusyDialog()
+          var view = this.oView;
+          this.oBusy = new sap.m.BusyDialog();
 
-          var that = this
-          this.oBusy.open()
+          var that = this;
+          this.oBusy.open();
 
           objDefaultModel.read(strServicePath, {
             success: function (data) {
               // Check Address Hits are there are not
-              this.oBusy.close();
-              debugger;
+              that.oBusy.close();
               if (data.Response.length === 0) {
                 sap.m.MessageToast.show('No Address Hits Found for this AlertID');
                 var oModel = new sap.ui.model.json.JSONModel(null);
@@ -61,12 +60,11 @@ sap.ui.define(
                 oModel.refresh(true);
                 return;
               }
-
               // Call your custom callback function here
-              AIRecommCallback(data, view);
-            },
+              that.AIRecommCallback(data, view);
+            }.bind(that),
             error: function () {
-              this.oBusy.close();
+              that.oBusy.close();
               throw new Error('Something went wrong --- too bad'); // Throw an error if the response is not ok
             }
           });
