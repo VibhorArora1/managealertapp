@@ -104,13 +104,14 @@ sap.ui.define(
             i2.ScreenedName = input[i].BP_FULL_NAME // Copy the ScreenedName from the input element
             i2.ScreenedAddress = input[i].SCREENEDADDRESS // Copy the ScreenedAddress from the input element
             i2.ScreenedCountry = input[i].BP_COUNTRY // Copy the ScreenedCity from the input element
+            AlertLC = input[i].ALERT_LC // Copy the AlertLC from the input element
             output.result.push({ Item: map[itemDBKey], i2: i2 }) // Push an object with Item and i2 properties to the output result array
           }
           var item = {} // Initialize an empty object for the item
           item.DBkey = input[i].DBKEY    // Copy the DBkey from the input element
           item.ItemDBkey = input[i].ITEMDBKEY    // Copy the ItemDbkey from the input element
-          //   item.Address_ID = input[i].Address_ID // Copy the Address_ID from the input element
           item.AddressDBkey = input[i].ADDRESSDBKEY    // Copy the Address_ID from the input element
+          // item.AddressDBkey = input[i].ADDRESS_ID    // Copy the Address_ID from the input element
           item.HitName = input[i].HIT_NAME // Copy the HitName from the input element
           item.HitCountryCode = input[i].HIT_COUNTRY // Copy the HitCountryCode from the input element
           item.HitAddress = input[i].HIT_ADDRESS // Copy the HitAddress from the input element
