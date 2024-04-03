@@ -14,15 +14,15 @@
 			<FlexBox id="_IDGenFlexBox2" direction="Column">
 				<items>
 				<Table id="_IDGenTable1" items="{M1>Item}" inset="false" alternateRowColors="false" 
-				mode="{= ${M1>AlertLC} === '02' ? 'MultiSelect' : 'None' }"
+				mode="MultiSelect"
 				growing="true" growingScrollToLoad="false" growingThreshold="5" selectionChange="onSelection">
 
 					<headerToolbar>
 						<OverflowToolbar id="_IDGenOverflowToolbar1">
 							<Title id="hitsTableHeaderTitle" text="{path:'M1>i2/ScreenedName'},{path:'M1>i2/ScreenedAddress'},{path:'M1>i2/ScreenedCountry'}"/>
 							<ToolbarSpacer id="_IDGenToolbarSpacer1"/>  
-							<Button id="idButton1" text="Submit Address Hits" type="Emphasized" press="onSubmitHits" enabled="{=${M1>AlertLC} === '02'}"></Button>
-							<Button id="idButton2" text="Complete Item" type="Emphasized" press="onCompleteItem" enabled="{=${M1>AlertLC} === '02'}"></Button>
+							<Button id="idButton1" text="Submit Address Hits" type="Emphasized" press="onSubmitHits"></Button>
+							<Button id="idButton2" text="Complete Item" type="Emphasized" press="onCompleteItem"></Button>
 						</OverflowToolbar>
 					</headerToolbar>
 
