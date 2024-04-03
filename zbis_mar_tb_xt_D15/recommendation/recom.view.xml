@@ -14,7 +14,7 @@
 			<FlexBox id="_IDGenFlexBox2" direction="Column">
 				<items>
 				<Table id="_IDGenTable1" items="{M1>Item}" inset="false" alternateRowColors="false" 
-				mode="{= ${$/AlertLC} === '02' ? 'MultiSelect' : 'None' }"
+				mode="MultiSelect"
 				growing="true" growingScrollToLoad="false" growingThreshold="5" selectionChange="onSelection">
 
 					<headerToolbar>
