@@ -226,12 +226,16 @@ sap.ui.controller('recommendation.recom', {
                 // Complete Item
                 that.completeItem(finalJSON, oModel, oSelectionPath);
               } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
-                return
+                return;
               }
             }.bind(this)
           }
         )
         isMessageBoxCalled = true // Set the flag variable to true
+      }
+      else {
+        // Complete Item
+        that.completeItem(finalJSON, oModel, oSelectionPath);
       }
     })
   }
