@@ -62,7 +62,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					var that = this;
 					this.cleanSlate(view);
 					// this.oBusy.open();
-					var oBusyTable = view.getId("smartTable");
+					var oBusyTable = view.byId("smartTable");
 					oBusyTable.setBusy(true);
 
 					objDefaultEncryption.read(strServicePathEncryption, {
