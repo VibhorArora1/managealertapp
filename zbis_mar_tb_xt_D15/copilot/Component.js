@@ -53,7 +53,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						useBatch: false
 					});
 
-					var objDefaultModelParamValue = new ODataModel(strRequestURLBase, {
+					var objDefaultModelParamValue = new ODataModel(strURLEncryption, {
 						json: true,
 						useBatch: false
 					});
