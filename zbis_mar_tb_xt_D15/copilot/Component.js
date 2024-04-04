@@ -334,8 +334,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 			},
 
 			bingSearch: function (generatedValues, pid, that) {
-				guid = that.generateGUID();
-				guid1 = that.generateGUID();
+			var guid = that.generateGUID();
+			var	guid1 = that.generateGUID();
 				$.ajax({
 					url: "https://www.bingapis.com/api/v1/chat/create",
 					type: "GET",
