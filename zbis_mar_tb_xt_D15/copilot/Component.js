@@ -217,88 +217,89 @@ sap.ui.define(["sap/ui/core/UIComponent",
 													}
 												}
 											});
+
+
+
+											var dataCompany = {
+												"MATCH": {
+													"Criteria": {
+														"Name": data.to_AlertOrgAddressV2.results[oIndex].CompanyName,
+														"Country": data.to_AlertOrgAddressV2.results[oIndex].Country,
+														"Address": data.to_AlertOrgAddressV2.results[oIndex].Street,
+														"City": data.to_AlertOrgAddressV2.results[oIndex].City,
+													},
+													"Options": {
+														"ExclusionFlags": [
+															"None"
+														],
+														"ScoreLimit": 0.80
+													}
+												},
+												"SELECT": [
+													"Match.Hint",
+													"Match.Score",
+													"Match.Name",
+													"Match.Name_Local",
+													"Match.MatchedName",
+													"Match.MatchedName_Type",
+													"Match.Address",
+													"Match.Postcode",
+													"Match.City",
+													"Match.Country",
+													"Match.Address_Type",
+													"Match.PhoneOrFax",
+													"Match.EmailOrWebsite",
+													"Match.National_Id",
+													"Match.NationalIdLabel",
+													"Match.State",
+													"Match.Region",
+													"Match.LegalForm",
+													"Match.ConsolidationCode",
+													"Match.Status",
+													"Match.Ticker",
+													"Match.CustomRule",
+													"Match.Isin",
+													"Match.BvDId"
+												]
+											};
+											const requestOptions = {
+												method: "POST",
+												headers: {
+													"Content-Type": "application/json",
+													'Authorization': `Bearer ${accessToken}`
+												},
+												body: JSON.stringify(dataCompany),
+											};
+
+											var oJSONModel = new sap.ui.model.json.JSONModel();
+											fetch(url, requestOptions)
+												.then((response) => response.json())
+												.then((dataMatch) => {
+													// Handle the response data here
+
+													// that.cleanSlate(view);
+													if (dataMatch.length === 0) {
+
+														sap.m.MessageToast.show("No Data Found with CO-PILOT");
+														// that.oBusy.close();
+														return;
+													}
+													oJSONModel.setData(dataMatch);
+													view.setModel(oJSONModel, "pf2");
+													// // that.oBusy.close();
+													// that.onLLM(null, false, JSON.stringify(data[0]), "Phrase the above data into English as per the company view", false, true);
+
+												})
+												.catch((error) => {
+													// that.oBusy.close();
+													// Handle any errors that occurred during the fetch
+													console.error("Error:", error);
+												});
+											//Set the view model.
+											view.setModel(dataModel);
+											dataModel.refresh();
 										}
 									});
-
-
-									var dataCompany = {
-										"MATCH": {
-											"Criteria": {
-												"Name": data.to_AlertOrgAddressV2.results[oIndex].CompanyName,
-												"Country": data.to_AlertOrgAddressV2.results[oIndex].Country,
-												"Address": data.to_AlertOrgAddressV2.results[oIndex].Street,
-												"City": data.to_AlertOrgAddressV2.results[oIndex].City,
-											},
-											"Options": {
-												"ExclusionFlags": [
-													"None"
-												],
-												"ScoreLimit": 0.80
-											}
-										},
-										"SELECT": [
-											"Match.Hint",
-											"Match.Score",
-											"Match.Name",
-											"Match.Name_Local",
-											"Match.MatchedName",
-											"Match.MatchedName_Type",
-											"Match.Address",
-											"Match.Postcode",
-											"Match.City",
-											"Match.Country",
-											"Match.Address_Type",
-											"Match.PhoneOrFax",
-											"Match.EmailOrWebsite",
-											"Match.National_Id",
-											"Match.NationalIdLabel",
-											"Match.State",
-											"Match.Region",
-											"Match.LegalForm",
-											"Match.ConsolidationCode",
-											"Match.Status",
-											"Match.Ticker",
-											"Match.CustomRule",
-											"Match.Isin",
-											"Match.BvDId"
-										]
-									};
-									const requestOptions = {
-										method: "POST",
-										headers: {
-											"Content-Type": "application/json",
-											'Authorization': `Bearer ${accessToken}`
-										},
-										body: JSON.stringify(dataCompany),
-									};
-
-									var oJSONModel = new sap.ui.model.json.JSONModel();
-									fetch(url, requestOptions)
-										.then((response) => response.json())
-										.then((dataMatch) => {
-											// Handle the response data here
-
-											// that.cleanSlate(view);
-											if (dataMatch.length === 0) {
-
-												sap.m.MessageToast.show("No Data Found with CO-PILOT");
-												// that.oBusy.close();
-												return;
-											}
-											oJSONModel.setData(dataMatch);
-											view.setModel(oJSONModel, "pf2");
-											// // that.oBusy.close();
-											// that.onLLM(null, false, JSON.stringify(data[0]), "Phrase the above data into English as per the company view", false, true);
-
-										})
-										.catch((error) => {
-											// that.oBusy.close();
-											// Handle any errors that occurred during the fetch
-											console.error("Error:", error);
-										});
-									//Set the view model.
-									view.setModel(dataModel);
-									dataModel.refresh();
 
 								},
 								error: function (jqXHR, textStatus, errorThrown) {
@@ -355,7 +356,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							.withAutomaticReconnect()
 							.build();
 						for (var i = 0; i < generatedValues.length; i++) {
-							connection.start().then(async function () {
+							await connection.start().then(async function () {
 
 								await that.chatHub(connection, generatedValues[i], guid, guid1, response, i);
 
@@ -374,11 +375,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				} else {
 					session = false;
 				}
-				if (i === generatedValues.length - 1) {
-					var stop = true;
-				} else {
-					stop = false;
-				}
+
 				const initialMessage = {
 					source: "BingApiProd",
 					isStartOfSession: session,
@@ -400,9 +397,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 				connection.stream("Chat", initialMessage).subscribe({
 					complete: () => {
-						if (stop) {
-							connection.stop()
-						}
+
+						connection.stop()
+
 					},
 					next: function (response) {
 						console.log("Received message:", response);
