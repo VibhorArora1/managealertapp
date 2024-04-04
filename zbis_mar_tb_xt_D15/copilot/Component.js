@@ -37,7 +37,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					var strRequestURLBase = "/sap/opu/odata/sap/ZBIS_C_ALERTBP_CDS/"; //Set up base call URL
 					var strServicePath = "/ZBIS_C_ALERTBP(guid'" + sAlertDBKey + "')"; //Set up dynamic part with AlertID
 
-
 					//Create the default Model object oData Service.
 					var objDefaultModel = new ODataModel(strRequestURLBase, {
 						json: true,
@@ -46,8 +45,15 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 					var strURLEncryption = "/sap/opu/odata/sap/ZBIS_COPILOT_SRV/"; //Set up base call URL
 					var strServicePathEncryption = "/ZBIS_C_FETCH_API_KEY" //Set up dynamic part with AlertID
+					var strServicePathParamVal = "/ZBIS_C_FETCH_PARAM_VALUE" //Get the value of Param Table
+
 
 					var objDefaultEncryption = new ODataModel(strURLEncryption, {
+						json: true,
+						useBatch: false
+					});
+
+					var objDefaultModelParamValue = new ODataModel(strRequestURLBase, {
 						json: true,
 						useBatch: false
 					});
@@ -79,11 +85,11 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("smartFormSearch").setVisible(false);
 							var oIconTabBar = view.byId("idIconTabBar");
 							if (oIconTabBar) {
-								
-									oIconTabBar.removeItem(oIconTabBar.getItems()[3]);
-									oIconTabBar.removeItem(oIconTabBar.getItems()[3]);
-									oIconTabBar.setSelectedKey("Match");
-								
+
+								oIconTabBar.removeItem(oIconTabBar.getItems()[3]);
+								oIconTabBar.removeItem(oIconTabBar.getItems()[3]);
+								oIconTabBar.setSelectedKey("Match");
+
 							}
 							//Grab an instance of the view, and set data retrieved to its default model.
 
@@ -162,6 +168,46 @@ sap.ui.define(["sap/ui/core/UIComponent",
 													var oIndex = 0;
 												}
 											}
+
+											objDefaultModelParamValue.read(strServicePathParamVal, {
+												success: function (paramDataValue) {
+													if (paramDataValue) {
+														var generatedValues = [];
+														paramDataValue.results.forEach(function (item) {
+															var question = item.question;
+															var display = true
+															question = question.replace(/&(\d+)&/g, function (match, capture) {
+																var index = parseInt(capture) - 1;
+																var fields = item.odatafieldvalue.split(',');
+																var parameterValue = item.parametervalue.split(',');
+																if (parameterValue[index] === 'OtherInfoValue') {
+																	var otherinfotype = item.otherinfotype.split(',');
+																	for (var i = 0; i < data.to_BPOtherInfoV2.results.length; i++) {
+																		if (data.to_BPOtherInfoV2.results[i].OtherInfoType === otherinfotype[index]) {
+																			var fieldValue = data.to_BPOtherInfoV2.results[i].OtherInfoValue;
+																			return fieldValue ? fieldValue : '';
+																		}
+																	}
+																	if (!fieldValue) {
+																		display = false;
+																	}
+																} else {
+																	// Build the replacement value based on odatafieldvalue and parametervalue
+																	fieldValue = fields[index] ? data.to_AlertOrgAddressV2.results[oIndex][parameterValue[index]] : '';
+																	return fieldValue ? fieldValue : '';
+																}
+															});
+
+															// Add the modified question to the generatedValues array
+															if (display) {
+																generatedValues.push(question);
+															}
+														});
+														console.log(generatedValues);
+													}
+												}
+											});
+
 
 											var dataCompany = {
 												"MATCH": {
@@ -262,6 +308,11 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				return this;
 			},
 
+			replacePlaceholders: function (question, placeholders) {
+				return question.replace(/&(\d+)&/g, function (match, index) {
+					return placeholders[index - 1];
+				});
+			},
 			init: function () {
 				// call super init (will call function "create content")
 				sap.ui.core.UIComponent.prototype.init.apply(this, arguments);
