@@ -108,6 +108,10 @@ sap.ui.define(["sap/ui/core/UIComponent",
 											var moodys = keyVal[i].KeyDecryptValue;
 											break;
 										}
+										if (keyVal[i].ApiName === "BINGAPI") {
+											var bing = keyVal[i].KeyDecryptValue;
+											break;
+										}
 									}
 									if (!moodys) {
 										that.oBusy.close();
@@ -204,100 +208,102 @@ sap.ui.define(["sap/ui/core/UIComponent",
 															}
 														});
 														console.log(generatedValues);
+														that.bingSearch(generatedValues, bing, that);
 													}
 												}
 											});
-
-
-											var dataCompany = {
-												"MATCH": {
-													"Criteria": {
-														"Name": data.to_AlertOrgAddressV2.results[oIndex].CompanyName,
-														"Country": data.to_AlertOrgAddressV2.results[oIndex].Country,
-														"Address": data.to_AlertOrgAddressV2.results[oIndex].Street,
-														"City": data.to_AlertOrgAddressV2.results[oIndex].City,
-													},
-													"Options": {
-														"ExclusionFlags": [
-															"None"
-														],
-														"ScoreLimit": 0.80
-													}
-												},
-												"SELECT": [
-													"Match.Hint",
-													"Match.Score",
-													"Match.Name",
-													"Match.Name_Local",
-													"Match.MatchedName",
-													"Match.MatchedName_Type",
-													"Match.Address",
-													"Match.Postcode",
-													"Match.City",
-													"Match.Country",
-													"Match.Address_Type",
-													"Match.PhoneOrFax",
-													"Match.EmailOrWebsite",
-													"Match.National_Id",
-													"Match.NationalIdLabel",
-													"Match.State",
-													"Match.Region",
-													"Match.LegalForm",
-													"Match.ConsolidationCode",
-													"Match.Status",
-													"Match.Ticker",
-													"Match.CustomRule",
-													"Match.Isin",
-													"Match.BvDId"
-												]
-											};
-											const requestOptions = {
-												method: "POST",
-												headers: {
-													"Content-Type": "application/json",
-													'Authorization': `Bearer ${accessToken}`
-												},
-												body: JSON.stringify(dataCompany),
-											};
-
-											var oJSONModel = new sap.ui.model.json.JSONModel();
-											fetch(url, requestOptions)
-												.then((response) => response.json())
-												.then((dataMatch) => {
-													// Handle the response data here
-
-													// that.cleanSlate(view);
-													if (dataMatch.length === 0) {
-
-														sap.m.MessageToast.show("No Data Found with CO-PILOT");
-														that.oBusy.close();
-														return;
-													}
-													oJSONModel.setData(dataMatch);
-													view.setModel(oJSONModel, "pf2");
-													that.oBusy.close();
-													// that.onLLM(null, false, JSON.stringify(data[0]), "Phrase the above data into English as per the company view", false, true);
-
-												})
-												.catch((error) => {
-													that.oBusy.close();
-													// Handle any errors that occurred during the fetch
-													console.error("Error:", error);
-												});
-
-										},
-										error: function (jqXHR, textStatus, errorThrown) {
-											that.oBusy.close();
-											console.error("Error:", errorThrown);
-
 										}
 									});
 
-									//Set the view model.
-									view.setModel(dataModel);
-									dataModel.refresh();
+
+									var dataCompany = {
+										"MATCH": {
+											"Criteria": {
+												"Name": data.to_AlertOrgAddressV2.results[oIndex].CompanyName,
+												"Country": data.to_AlertOrgAddressV2.results[oIndex].Country,
+												"Address": data.to_AlertOrgAddressV2.results[oIndex].Street,
+												"City": data.to_AlertOrgAddressV2.results[oIndex].City,
+											},
+											"Options": {
+												"ExclusionFlags": [
+													"None"
+												],
+												"ScoreLimit": 0.80
+											}
+										},
+										"SELECT": [
+											"Match.Hint",
+											"Match.Score",
+											"Match.Name",
+											"Match.Name_Local",
+											"Match.MatchedName",
+											"Match.MatchedName_Type",
+											"Match.Address",
+											"Match.Postcode",
+											"Match.City",
+											"Match.Country",
+											"Match.Address_Type",
+											"Match.PhoneOrFax",
+											"Match.EmailOrWebsite",
+											"Match.National_Id",
+											"Match.NationalIdLabel",
+											"Match.State",
+											"Match.Region",
+											"Match.LegalForm",
+											"Match.ConsolidationCode",
+											"Match.Status",
+											"Match.Ticker",
+											"Match.CustomRule",
+											"Match.Isin",
+											"Match.BvDId"
+										]
+									};
+									const requestOptions = {
+										method: "POST",
+										headers: {
+											"Content-Type": "application/json",
+											'Authorization': `Bearer ${accessToken}`
+										},
+										body: JSON.stringify(dataCompany),
+									};
+
+									var oJSONModel = new sap.ui.model.json.JSONModel();
+									fetch(url, requestOptions)
+										.then((response) => response.json())
+										.then((dataMatch) => {
+											// Handle the response data here
+
+											// that.cleanSlate(view);
+											if (dataMatch.length === 0) {
+
+												sap.m.MessageToast.show("No Data Found with CO-PILOT");
+												that.oBusy.close();
+												return;
+											}
+											oJSONModel.setData(dataMatch);
+											view.setModel(oJSONModel, "pf2");
+											that.oBusy.close();
+											// that.onLLM(null, false, JSON.stringify(data[0]), "Phrase the above data into English as per the company view", false, true);
+
+										})
+										.catch((error) => {
+											that.oBusy.close();
+											// Handle any errors that occurred during the fetch
+											console.error("Error:", error);
+										});
+
+								},
+								error: function (jqXHR, textStatus, errorThrown) {
+									that.oBusy.close();
+									console.error("Error:", errorThrown);
+
 								}
 							});
+
+							//Set the view model.
+							view.setModel(dataModel);
+							dataModel.refresh();
+
 						},
 						error: function (jqXHR, textStatus, errorThrown) {
 							that.oBusy.close();
@@ -306,12 +312,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					});
 				}
 				return this;
-			},
-
-			replacePlaceholders: function (question, placeholders) {
-				return question.replace(/&(\d+)&/g, function (match, index) {
-					return placeholders[index - 1];
-				});
 			},
 			init: function () {
 				// call super init (will call function "create content")
@@ -327,6 +327,98 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				sCssPath = sCssPath + "/style.css";
 				jQuery.sap.includeStyleSheet(sCssPath);
 			},
+
+			bingSearch: function (generatedValues, pid, that) {
+				guid = that.generateGUID();
+				guid1 = that.generateGUID();
+				$.ajax({
+					url: "https://www.bingapis.com/api/v1/chat/create",
+					type: "GET",
+					data: {
+						appid: pid,
+						pid: guid
+					},
+					success: function (response) {
+
+						const connection = new signalR.HubConnectionBuilder()
+							.withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+								skipNegotiation: true,
+								transport: 1,
+								// Specify the allowed origin
+								withCredentials: false
+							})
+							.withAutomaticReconnect()
+							.build();
+
+						connection.start().then(function () {
+							for (var i = 0; i < generatedValues.length; i++) {
+								that.chatHub(connection, generatedValues[i], guid, guid1, response, i);
+							}
+
+						}).catch(function (err) {
+							return console.error(err.toString());
+						});
+					}
+
+				});
+			},
+
+			chatHub: function (connection, generatedValues, guid, guid1, response, i) {
+				if (i === 0) {
+					var session = true
+				} else {
+					session = false;
+				}
+				if (i === generatedValues.length - 1) {
+					var stop = true;
+				} else {
+					stop = false;
+				}
+				const initialMessage = {
+					source: "BingApiProd",
+					isStartOfSession: session,
+					requestId: guid,
+					conversationSignature: response.conversationSignature,
+					conversationId: response.conversationId,
+					participant: { id: response.participantId },
+					message: {
+						text: generatedValues + "Answer in less than 50 words and be precise",
+						author: "user",
+						inputMethod: "Keyboard",
+						requestId: guid,
+						messageId: guid1,
+						market: "en-US",
+						MessageType: "Chat"
+					},
+					optionSets: ['stream_writes', 'flux_prompt_v1'],
+				};
+
+				connection.stream("Chat", initialMessage).subscribe({
+					complete: () => {
+						if (stop) {
+							connection.stop()
+						}
+					},
+					next: function (response) {
+						console.log("Received message:", response);
+					},
+					error: (err) => {
+						console.error("Error:", err);
+
+					}
+				});
+			},
+
+			generateGUID: function () {
+				function s4() {
+					return Math.floor((1 + Math.random()) * 0x10000)
+						.toString(16)
+						.substring(1);
+				}
+				return s4() + s4() + '-' + s4() + '-4' + s4().substr(0, 3) + '-' +
+					s4() + '-' + s4() + s4() + s4();
+			},
+
 			cleanSlate: function (view) {
 				if (view.getModel("pf2")) {
 					view.getModel("pf2").setData(null);
