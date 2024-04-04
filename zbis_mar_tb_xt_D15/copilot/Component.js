@@ -106,11 +106,11 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									for (var i = 0; i < keyVal.length; i++) {
 										if (keyVal[i].ApiName === "MODDYS") {
 											var moodys = keyVal[i].KeyDecryptValue;
-											break;
+											
 										}
 										if (keyVal[i].ApiName === "BINGAPI") {
 											var bing = keyVal[i].KeyDecryptValue;
-											break;
+											
 										}
 									}
 									if (!moodys) {
@@ -119,6 +119,11 @@ sap.ui.define(["sap/ui/core/UIComponent",
 										return;
 									}
 
+									if (!bing) {
+										that.oBusy.close();
+										sap.m.MessageToast.show("Please check the API Key for Bing");
+										return;
+									}
 									var tokenEndpoint = "https://token.hub.moodysanalytics.com/prod/auth/token";
 									var username = "vibhorarora@microsoft.com";
 
@@ -291,6 +296,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 											// Handle any errors that occurred during the fetch
 											console.error("Error:", error);
 										});
+									//Set the view model.
+									view.setModel(dataModel);
+									dataModel.refresh();
 
 								},
 								error: function (jqXHR, textStatus, errorThrown) {
@@ -300,9 +308,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								}
 							});
 
-							//Set the view model.
-							view.setModel(dataModel);
-							dataModel.refresh();
 
 						},
 						error: function (jqXHR, textStatus, errorThrown) {
