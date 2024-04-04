@@ -339,6 +339,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 			bingSearch: async function (generatedValues, pid, that) {
 				var guid = that.generateGUID();
 				var guid1 = that.generateGUID();
+				var aResult = [];
+				var oResut = {};
 				$.ajax({
 					url: "https://www.bingapis.com/api/v1/chat/create",
 					type: "GET",
@@ -360,7 +362,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						for (var i = 0; i < generatedValues.length; i++) {
 							await connection.start().then(async function () {
 
-								await that.chatHub(connection, generatedValues[i], guid, guid1, response, i);
+								await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut);
 
 							}).catch(function (err) {
 								return console.error(err.toString());
@@ -371,7 +373,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				});
 			},
 
-			chatHub: async function (connection, generatedValues, guid, guid1, response, i) {
+			chatHub: async function (connection, generatedValues, guid, guid1, response, i, aResult, oResut) {
 				if (i === 0) {
 					var session = true
 				} else {
@@ -405,6 +407,10 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					},
 					next: function (response) {
 						console.log("Received message:", response);
+						oResut.question = generatedValues;
+						oResut.answer = response.result.message;
+						aResult.push(oResut);
+						
 					},
 					error: (err) => {
 						console.error("Error:", err);
