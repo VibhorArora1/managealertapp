@@ -62,6 +62,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					var that = this;
 					this.cleanSlate(view);
 					// this.oBusy.open();
+					var oBusyTable = view.getId("smartTable");
+					oBusyTable.setBusy(true);
 
 					objDefaultEncryption.read(strServicePathEncryption, {
 						success: function (encryptionData) {
@@ -114,13 +116,13 @@ sap.ui.define(["sap/ui/core/UIComponent",
 										}
 									}
 									if (!moodys) {
-										// that.oBusy.close();
+										oBusyTable.setBusy(false);
 										sap.m.MessageToast.show("Please check the API Key for Moody's");
 										return;
 									}
 
 									if (!bing) {
-										// that.oBusy.close();
+										oBusyTable.setBusy(false);
 										sap.m.MessageToast.show("Please check the API Key for Bing");
 										return;
 									}
@@ -281,17 +283,17 @@ sap.ui.define(["sap/ui/core/UIComponent",
 													if (dataMatch.length === 0) {
 
 														sap.m.MessageToast.show("No Data Found with CO-PILOT");
-														// that.oBusy.close();
+														oBusyTable.setBusy(false);
 														return;
 													}
 													oJSONModel.setData(dataMatch);
 													view.setModel(oJSONModel, "pf2");
-													// // that.oBusy.close();
+													oBusyTable.setBusy(false);
 													// that.onLLM(null, false, JSON.stringify(data[0]), "Phrase the above data into English as per the company view", false, true);
 
 												})
 												.catch((error) => {
-													// that.oBusy.close();
+													oBusyTable.setBusy(false);
 													// Handle any errors that occurred during the fetch
 													console.error("Error:", error);
 												});
@@ -303,7 +305,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 								},
 								error: function (jqXHR, textStatus, errorThrown) {
-									// that.oBusy.close();
+									 oBusyTable.setBusy(false);
 									console.error("Error:", errorThrown);
 
 								}
@@ -312,7 +314,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 						},
 						error: function (jqXHR, textStatus, errorThrown) {
-							// that.oBusy.close();
+							oBusyTable.setBusy(false);
 							console.error("Error:", errorThrown);
 						}
 					});
@@ -395,7 +397,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					optionSets: ['stream_writes', 'flux_prompt_v1'],
 				};
 
-				connection.stream("Chat", initialMessage).subscribe({
+				await connection.stream("Chat", initialMessage).subscribe({
 					complete: () => {
 
 						connection.stop()

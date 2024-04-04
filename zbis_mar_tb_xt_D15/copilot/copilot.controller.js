@@ -1198,7 +1198,7 @@ sap.ui.controller("copilot.copilot", {
                 }
             },
             error: function (error) {
-                that.getView().byId("OwnershipTableId").getBusy(false);
+                that.getView().byId("OwnershipTableId").setBusy(false);
                 console.error("Error:", error);
             }
         });
