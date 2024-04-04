@@ -61,7 +61,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					this.oBusy = new sap.m.BusyDialog();
 					var that = this;
 					this.cleanSlate(view);
-					this.oBusy.open();
+					// this.oBusy.open();
 
 					objDefaultEncryption.read(strServicePathEncryption, {
 						success: function (encryptionData) {
@@ -106,21 +106,21 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									for (var i = 0; i < keyVal.length; i++) {
 										if (keyVal[i].ApiName === "MODDYS") {
 											var moodys = keyVal[i].KeyDecryptValue;
-											
+
 										}
 										if (keyVal[i].ApiName === "BINGAPI") {
 											var bing = keyVal[i].KeyDecryptValue;
-											
+
 										}
 									}
 									if (!moodys) {
-										that.oBusy.close();
+										// that.oBusy.close();
 										sap.m.MessageToast.show("Please check the API Key for Moody's");
 										return;
 									}
 
 									if (!bing) {
-										that.oBusy.close();
+										// that.oBusy.close();
 										sap.m.MessageToast.show("Please check the API Key for Bing");
 										return;
 									}
@@ -282,17 +282,17 @@ sap.ui.define(["sap/ui/core/UIComponent",
 											if (dataMatch.length === 0) {
 
 												sap.m.MessageToast.show("No Data Found with CO-PILOT");
-												that.oBusy.close();
+												// that.oBusy.close();
 												return;
 											}
 											oJSONModel.setData(dataMatch);
 											view.setModel(oJSONModel, "pf2");
-											that.oBusy.close();
+											// // that.oBusy.close();
 											// that.onLLM(null, false, JSON.stringify(data[0]), "Phrase the above data into English as per the company view", false, true);
 
 										})
 										.catch((error) => {
-											that.oBusy.close();
+											// that.oBusy.close();
 											// Handle any errors that occurred during the fetch
 											console.error("Error:", error);
 										});
@@ -302,7 +302,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 								},
 								error: function (jqXHR, textStatus, errorThrown) {
-									that.oBusy.close();
+									// that.oBusy.close();
 									console.error("Error:", errorThrown);
 
 								}
@@ -311,7 +311,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 						},
 						error: function (jqXHR, textStatus, errorThrown) {
-							that.oBusy.close();
+							// that.oBusy.close();
 							console.error("Error:", errorThrown);
 						}
 					});
@@ -333,9 +333,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				jQuery.sap.includeStyleSheet(sCssPath);
 			},
 
-			bingSearch: function (generatedValues, pid, that) {
-			var guid = that.generateGUID();
-			var	guid1 = that.generateGUID();
+			bingSearch: async function (generatedValues, pid, that) {
+				var guid = that.generateGUID();
+				var guid1 = that.generateGUID();
 				$.ajax({
 					url: "https://www.bingapis.com/api/v1/chat/create",
 					type: "GET",
@@ -343,7 +343,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						appid: pid,
 						pid: guid
 					},
-					success: function (response) {
+					success: async function (response) {
 
 						const connection = new signalR.HubConnectionBuilder()
 							.withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
@@ -354,21 +354,21 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							})
 							.withAutomaticReconnect()
 							.build();
+						for (var i = 0; i < generatedValues.length; i++) {
+							connection.start().then(async function () {
 
-						connection.start().then(function () {
-							for (var i = 0; i < generatedValues.length; i++) {
-								that.chatHub(connection, generatedValues[i], guid, guid1, response, i);
-							}
+								await that.chatHub(connection, generatedValues[i], guid, guid1, response, i);
 
-						}).catch(function (err) {
-							return console.error(err.toString());
-						});
+							}).catch(function (err) {
+								return console.error(err.toString());
+							});
+						}
 					}
 
 				});
 			},
 
-			chatHub: function (connection, generatedValues, guid, guid1, response, i) {
+			chatHub: async function (connection, generatedValues, guid, guid1, response, i) {
 				if (i === 0) {
 					var session = true
 				} else {
