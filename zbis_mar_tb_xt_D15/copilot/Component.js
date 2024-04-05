@@ -362,7 +362,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						for (var i = 0; i < generatedValues.length; i++) {
 							await connection.start().then(async function () {
 
-								await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut);
+								await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut).then(function () {
+								oResut.push(aResult)
+								});
 
 							}).catch(function (err) {
 								return console.error(err.toString());
@@ -409,8 +411,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						console.log("Received message:", response);
 						oResut.question = generatedValues;
 						oResut.answer = response.result.message;
-						aResult.push(oResut);
-						
+						return oResut;
 					},
 					error: (err) => {
 						console.error("Error:", err);
