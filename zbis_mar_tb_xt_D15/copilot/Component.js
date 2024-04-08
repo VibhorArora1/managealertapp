@@ -83,7 +83,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("idVerticalLayoutSanction").setVisible(false);
 							view.byId("idVerticalLayoutOwnership").setVisible(false);
 							view.byId("_IDGenList1").setVisible(false);
-							view.byId("_IDGenFeedInput3").setVisible(false);
 							view.byId("_IDGenFeedInput2").setVisible(false);
 							view.byId("_IDGenList2").setVisible(false);
 							view.byId("sanctionTabVerticalID").setVisible(false);
