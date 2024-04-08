@@ -349,10 +349,14 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						pid: guid
 					},
 					success: async function (response) {
+						that.iterationChatHub(generatedValues, that,response, guid, guid1, aResult, oResut);
+					}
 
+				});
+			},
 
-
-						var i = 0; // Initialize index variable
+			iterationChatHub: async function (generatedValues,that,response, guid, guid1, aResult, oResut){
+				var i = 0; // Initialize index variable
 						var chatHubCallback = async function () {
 							if (i < generatedValues.length) {
 								const connection = new signalR.HubConnectionBuilder()
@@ -367,7 +371,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								await connection.start().then(async function () {
 									await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut).then(async function () {
 										// Stop the connection after each iteration
-										oResut.push(aResult);
+										// oResut.push(aResult);
+										aResult.push(oResut);
 										i++; // Increment index after processing each chatHub call
 										await connection.stop();
 										chatHubCallback();
@@ -379,19 +384,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							}
 						};
 						chatHubCallback(); // Call the chatHubCallback for the first iteration	
-
-						// for (var i = 0; i < generatedValues.length; i++) {
-						// 	await connection.start().then(async function () {
-
-						// 		const result = await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut)
-
-						// 	}).catch(function (err) {
-						// 		return console.error(err.toString());
-						// 	});
-						// }
-					}
-
-				});
 			},
 
 			chatHub: async function (connection, generatedValues, guid, guid1, response, i, aResult, oResut) {
