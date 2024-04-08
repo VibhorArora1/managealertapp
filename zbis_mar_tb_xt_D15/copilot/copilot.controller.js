@@ -1240,6 +1240,8 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn2").setVisible(false);
             this.getView().byId("_IDGenFeedInput2").setVisible(false);
             this.getView().byId("_IDGenList2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput3").setVisible(false);
+            this.getView().byId("_IDGenList3").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(true);
         }
         if (sKey === "Summary") {
@@ -1256,6 +1258,8 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn2").setVisible(false);
             this.getView().byId("_IDGenFeedInput2").setVisible(false);
             this.getView().byId("_IDGenList2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput3").setVisible(false);
+            this.getView().byId("_IDGenList3").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
         if (sKey === "Match") {
@@ -1272,6 +1276,8 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn2").setVisible(false);
             this.getView().byId("_IDGenFeedInput2").setVisible(false);
             this.getView().byId("_IDGenList2").setVisible(false);
+            this.getView().byId("_IDGenFeedInput3").setVisible(false);
+            this.getView().byId("_IDGenList3").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
 
         }
@@ -1296,6 +1302,8 @@ sap.ui.controller("copilot.copilot", {
                     this.getView().byId("smartFormColumn2").setVisible(true);
                     this.getView().byId("_IDGenFeedInput2").setVisible(true);
                     this.getView().byId("_IDGenList2").setVisible(true);
+                    this.getView().byId("_IDGenFeedInput3").setVisible(true);
+                    this.getView().byId("_IDGenList3").setVisible(true);
                     this.getView().byId("sanctionTabVerticalID").setVisible(false);
                 } else {
                     sap.m.MessageToast.show("No Data found with Bing Search");

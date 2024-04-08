@@ -83,6 +83,10 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("idVerticalLayoutSanction").setVisible(false);
 							view.byId("idVerticalLayoutOwnership").setVisible(false);
 							view.byId("_IDGenList1").setVisible(false);
+							this.getView().byId("_IDGenFeedInput3").setVisible(false);
+							this.getView().byId("_IDGenList3").setVisible(false);
+							this.getView().byId("_IDGenFeedInput2").setVisible(false);
+							this.getView().byId("_IDGenList2").setVisible(false);
 							view.byId("sanctionTabVerticalID").setVisible(false);
 							view.byId("smartFormSearch").setVisible(false);
 							view.byId("idVerticalLayoutBingSearch").setVisible(false);
@@ -407,13 +411,13 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							};
 
 							await connection.stream("Chat", initialMessage).subscribe({
-								 complete: () => {
+								complete: () => {
 
 									// connection.stop()
-									
+
 									console.log("Stream completed");
 									that.connectionStop(connection);
-									
+
 								},
 								next: function (response) {
 									console.log("Received message:", response);
@@ -422,7 +426,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									aResult.push(oResut);
 									var JSONoModelBing = new sap.ui.model.json.JSONModel(aResult);
 									view.setModel(JSONoModelBing, "pf12");
-									
+
 								},
 								error: (err) => {
 									console.error("Error:", err);
@@ -530,10 +534,11 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				}
 				if (view.getModel("pf12")) {
 					view.getModel("pf12").setData(null);
-				
-				if (view.getModel("pf13")) {
-					view.getModel("pf13").setData(null);
-				}}
+
+					if (view.getModel("pf13")) {
+						view.getModel("pf13").setData(null);
+					}
+				}
 			}
 		});
 	});

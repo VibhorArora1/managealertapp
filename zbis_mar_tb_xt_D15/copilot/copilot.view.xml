@@ -239,6 +239,11 @@
 		<ObjectIdentifier title="Retrieved Information" text="{pf13>Sanction}" titleActive="false"/>
 	</l:VerticalLayout>
 
+
+<List id="_IDGenList3" showSeparators="Inner" items="{pf13>/}" visible="false">
+                <FeedListItem id="_IDGenFeedListItem3" iconDensityAware="false" info="Reply" text="{pf13>Sanction}"
+      convertLinksToAnchorTags="All" />
+      </List>
   <smartForm:SmartForm id="smartFormColumn2"
 		
 			 title="Bing Open Search"
