@@ -391,8 +391,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationSignature: response.conversationSignature,
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
-								tone: "Balanced",
-								spokenTextMode: "None",
 								message: {
 									text: generatedValues,
 									author: "user",
