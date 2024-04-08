@@ -391,8 +391,10 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationSignature: response.conversationSignature,
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
+								tone: "Balanced",
+								spokenTextMode: "None",
 								message: {
-									text: generatedValues + "Answer in less than 50 words and be precise",
+									text: generatedValues,
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
@@ -404,20 +406,21 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							};
 
 							await connection.stream("Chat", initialMessage).subscribe({
-								 complete: () => {
+								 complete: (log) => {
 
 									// connection.stop()
+									
 									console.log("Stream completed");
 									that.connectionStop(connection);
+									console.log(log);
 								},
 								next: function (response) {
 									console.log("Received message:", response);
 									oResut.question = generatedValues;
 									oResut.answer = response.result.message;
 									aResult.push(oResut);
-									var oModel = new sap.ui.model.json.JSONModel();
-									oModel.setData(aResult);
-									view.setModel(oModel, "pf12");
+									var JSONoModelBing = new sap.ui.model.json.JSONModel(aResult);
+									view.setModel(JSONoModelBing, "pf12");
 									
 								},
 								error: (err) => {

@@ -1292,14 +1292,20 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("_IDGenList2").setVisible(true);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
 
-        var data = this.getView().getModel("pf12").getData();
-        if(data){
-            var oModel = new sap.ui.model.json.JSONModel();
-            stringData = JSON.stringify(data);
-            this.onLLM(null, false, stringData, "With the Above Data, Can we get above question and answer phrase in order?", false, "pf13", oModel, true);
-        }else{
-            sap.m.MessageToast.show("No Data found with Bing Search");
-        }
+            if (this.getView().getModel("pf12")) {
+                var data = this.getView().getModel("pf12").getData();
+                if (data) {
+                    var oModel = new sap.ui.model.json.JSONModel();
+                    stringData = JSON.stringify(data);
+                    this.onLLM(null, false, stringData, "With the Above Data, Can we get above question and answer phrase in order?", false, "pf13", oModel, true);
+                } else {
+                    sap.m.MessageToast.show("No Data found with Bing Search");
+                }
+            }else{
+                sap.m.MessageToast.show("Data Still Loading Please wait...");
+                var oIconTabBar = this.getView().byId("idIconTabBar");
+                oIconTabBar.setSelectedKey("Match");
+            }
         }
 
     },
