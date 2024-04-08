@@ -229,6 +229,16 @@
   </smartForm:SmartForm> 
 
 
+ <l:VerticalLayout
+    id="idVerticalLayoutBingSearch"
+		binding="{pf13>/}"
+		class="sapUiContentPadding"
+		visible="false"
+    width="100%">
+    
+		<ObjectIdentifier title="Retrieved Information" text="{pf13>Sanction}" titleActive="false"/>
+	</l:VerticalLayout>
+
   <smartForm:SmartForm id="smartFormColumn2"
 		
 			 title="Bing Open Search"

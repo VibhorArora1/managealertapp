@@ -61,7 +61,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					this.oBusy = new sap.m.BusyDialog();
 					var that = this;
 					this.cleanSlate(view);
-					// this.oBusy.open();
+					this.oBusy.open();
 					var oBusyTable = view.byId("smartTable");
 					oBusyTable.setBusy(true);
 
@@ -85,6 +85,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("_IDGenList1").setVisible(false);
 							view.byId("sanctionTabVerticalID").setVisible(false);
 							view.byId("smartFormSearch").setVisible(false);
+							view.byId("idVerticalLayoutBingSearch").setVisible(true);
 							var oIconTabBar = view.byId("idIconTabBar");
 							if (oIconTabBar) {
 
@@ -108,21 +109,25 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									for (var i = 0; i < keyVal.length; i++) {
 										if (keyVal[i].ApiName === "MODDYS") {
 											var moodys = keyVal[i].KeyDecryptValue;
+											that.oBusy.close();
 
 										}
 										if (keyVal[i].ApiName === "BINGAPI") {
 											var bing = keyVal[i].KeyDecryptValue;
+											that.oBusy.close();
 
 										}
 									}
 									if (!moodys) {
 										oBusyTable.setBusy(false);
+										that.oBusy.close();
 										sap.m.MessageToast.show("Please check the API Key for Moody's");
 										return;
 									}
 
 									if (!bing) {
 										oBusyTable.setBusy(false);
+										that.oBusy.close();
 										sap.m.MessageToast.show("Please check the API Key for Bing");
 										return;
 									}
@@ -284,16 +289,19 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 														sap.m.MessageToast.show("No Data Found with CO-PILOT");
 														oBusyTable.setBusy(false);
+														that.oBusy.close();
 														return;
 													}
 													oJSONModel.setData(dataMatch);
 													view.setModel(oJSONModel, "pf2");
 													oBusyTable.setBusy(false);
+													that.oBusy.close();
 													// that.onLLM(null, false, JSON.stringify(data[0]), "Phrase the above data into English as per the company view", false, true);
 
 												})
 												.catch((error) => {
 													oBusyTable.setBusy(false);
+													that.oBusy.close();
 													// Handle any errors that occurred during the fetch
 													console.error("Error:", error);
 												});
@@ -401,16 +409,15 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									// connection.stop()
 									console.log("Stream completed");
 									that.connectionStop(connection);
-									// await connection.stop();
-									i++; // Increment index after processing each chatHub call
-									chatHubCallback();
-
 								},
 								next: function (response) {
 									console.log("Received message:", response);
 									oResut.question = generatedValues;
 									oResut.answer = response.result.message;
 									aResult.push(oResut);
+									var oModel = new sap.ui.model.json.JSONModel();
+									oModel.setData(aResult);
+									view.setModel(oModel, "pf12");
 									
 								},
 								error: (err) => {
@@ -418,17 +425,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 								}
 							});
-
-
-
-							// await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut).then(async function () {
-							// 	// Stop the connection after each iteration
-							// 	aResult.push(oResut);
-							// 	i++; // Increment index after processing each chatHub call
-							// 	await connection.stop();
-							// 	chatHubCallback();
-							// });
-							// Call the chatHubCallback recursively for the next iteration
 						}).catch(function (err) {
 							return console.error(err.toString());
 						});
@@ -528,6 +524,12 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				if (view.getModel("pf11")) {
 					view.getModel("pf11").setData(null);
 				}
+				if (view.getModel("pf12")) {
+					view.getModel("pf12").setData(null);
+				
+				if (view.getModel("pf13")) {
+					view.getModel("pf13").setData(null);
+				}}
 			}
 		});
 	});

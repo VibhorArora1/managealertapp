@@ -9,7 +9,7 @@ sap.ui.controller("copilot.copilot", {
 
         var oTable = this.getView().byId("OwnershipTableId");
 
-        
+
 
         oTable.attachUpdateFinished(function (oEvent) {
             // Your custom logic here
@@ -59,46 +59,46 @@ sap.ui.controller("copilot.copilot", {
         };
 
         var oModel = new sap.ui.model.json.JSONModel(oData);
-                this.getView().setModel(oModel, "Model1");
-                var oSmartForm = this.getView().byId("smartFormSearch");
-                var oSmartFormlayout = new sap.ui.comp.smartform.Layout({
-                });
-                // Create a Group control
-                var int = oModel.getData().Model1.length / 2;
-                var final = parseInt(int) + 1;
+        this.getView().setModel(oModel, "Model1");
+        var oSmartForm = this.getView().byId("smartFormSearch");
+        var oSmartFormlayout = new sap.ui.comp.smartform.Layout({
+        });
+        // Create a Group control
+        var int = oModel.getData().Model1.length / 2;
+        var final = parseInt(int) + 1;
 
-                var index = 0;
-                var that = this;
-               
-                oModel.getData().Model1.forEach(function (obj) {        
-                    index++;
-                    if (index === 1) {
-                        
-                        var oGroup = new sap.ui.comp.smartform.Group({
-                            // label: obj.Question
-                        });         
-                        oSmartForm.addGroup(oGroup);
-                        that._group = oGroup;
-                    }else{
-                        oGroup  = that._group;
-                    }
-                    if(index === final){
-                        index = 0;
-                    }
+        var index = 0;
+        var that = this;
 
-                    // Add the Group to the SmartForm
-                    
-                    
-                    var oGroupElement = new sap.ui.comp.smartform.GroupElement({
-                        elements: [
-                        ]
-                    });
-                    var oText = new sap.m.Text({ text: obj.Question + ":", editable: false });
-                    var oText1 = new sap.m.Text({ text: obj.Answer, editable: false });
-                    oGroupElement.addElement(oText);
-                    oGroupElement.addElement(oText1);
-                    oGroup.addGroupElement(oGroupElement);
+        oModel.getData().Model1.forEach(function (obj) {
+            index++;
+            if (index === 1) {
+
+                var oGroup = new sap.ui.comp.smartform.Group({
+                    // label: obj.Question
                 });
+                oSmartForm.addGroup(oGroup);
+                that._group = oGroup;
+            } else {
+                oGroup = that._group;
+            }
+            if (index === final) {
+                index = 0;
+            }
+
+            // Add the Group to the SmartForm
+
+
+            var oGroupElement = new sap.ui.comp.smartform.GroupElement({
+                elements: [
+                ]
+            });
+            var oText = new sap.m.Text({ text: obj.Question + ":", editable: false });
+            var oText1 = new sap.m.Text({ text: obj.Answer, editable: false });
+            oGroupElement.addElement(oText);
+            oGroupElement.addElement(oText1);
+            oGroup.addGroupElement(oGroupElement);
+        });
 
 
     },
@@ -127,14 +127,14 @@ sap.ui.controller("copilot.copilot", {
                 console.log(response);
                 that.getOwnerComponent()._response = response;
                 const connection = new signalR.HubConnectionBuilder()
-                .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
-                    skipNegotiation: true,
-                    transport: 1,
-                    // Specify the allowed origin
-                    withCredentials: false
-                })
-                .withAutomaticReconnect()
-                .build();
+                    .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+                        skipNegotiation: true,
+                        transport: 1,
+                        // Specify the allowed origin
+                        withCredentials: false
+                    })
+                    .withAutomaticReconnect()
+                    .build();
                 connection.logging = true;
                 const initialMessage = {
                     // source: "BingApiTest",
@@ -156,10 +156,10 @@ sap.ui.controller("copilot.copilot", {
                     },
                     optionSets: ['stream_writes', 'flux_prompt_v1'],
                 };
-                 connection.on("send", initialMessage => {
+                connection.on("send", initialMessage => {
                     console.log(initialMessage);
                 });
-                
+
                 connection.start().then(function () {
                     console.log("Connected!");
                     connection.stream("Chat", initialMessage).subscribe({
@@ -169,7 +169,7 @@ sap.ui.controller("copilot.copilot", {
                         next: function (response) {
                             console.log("Received message:", response);
                             // for (var message of response.messages) {
-                                console.log("Received message:", message);
+                            console.log("Received message:", message);
                             // }
                         },
                         error: (err) => {
@@ -1005,8 +1005,8 @@ sap.ui.controller("copilot.copilot", {
                                     directSanctionData.data.nodes[i].sanctionsByExt = directSanctionData.data.nodes[i].sanctionsByExt.filter(item => typeof item.percentage === 'number');
                                     var oModel11 = new sap.ui.model.json.JSONModel(directSanctionData.data.nodes[i]);
                                     that.getView().setModel(oModel11, "pf11");
-                                    if(directSanctionData.data.nodes[i].sanctionsByExt.length > 0 || directSanctionData.data.nodes[i].sanctions.length > 0){
-                                    data.Data[0].SANCTION_BY_EXTENSION = directSanctionData.data.nodes[i];
+                                    if (directSanctionData.data.nodes[i].sanctionsByExt.length > 0 || directSanctionData.data.nodes[i].sanctions.length > 0) {
+                                        data.Data[0].SANCTION_BY_EXTENSION = directSanctionData.data.nodes[i];
                                     }
                                     that.getOwnerComponent._directSanctionStringData = JSON.stringify(directSanctionData.data);
                                 }
@@ -1044,7 +1044,7 @@ sap.ui.controller("copilot.copilot", {
                             oModel.setData(data.Data[0].CONTROLLING_SHAREHOLDERS);
                             that.getView().setModel(oModel, "pf3");
                             that.getOwnerComponent()._companyOwnerShipDataString = JSON.stringify(data.Data[0]); //+ that.getOwnerComponent._directSanctionStringData;
-                            if(that.getOwnerComponent()._companyOwnerShipDataString.length > 12000){
+                            if (that.getOwnerComponent()._companyOwnerShipDataString.length > 12000) {
                                 that.getOwnerComponent()._companyOwnerShipDataString = that.getOwnerComponent()._companyOwnerShipDataString.substring(0, 12000);
                             }
                             that.onLLM(null, false, that.getOwnerComponent()._companyOwnerShipDataString, "With the Above data, tell if you have anything on the legal information? and also show additional information such as AKA NAME, Vat number, Tax id, Company Number, LEI and other information? ", false, "pf10", oModel4, false);
@@ -1228,6 +1228,7 @@ sap.ui.controller("copilot.copilot", {
         var sKey = oEvent.getParameter("key");
         if (sKey === "Sanctions") {
             this.getView().byId("smartFormSearch").setVisible(false);
+            this.getView().byId("idVerticalLayoutBingSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(true);
             this.getView().byId("OwnershipTableId").setVisible(true);
@@ -1243,6 +1244,7 @@ sap.ui.controller("copilot.copilot", {
         }
         if (sKey === "Summary") {
             this.getView().byId("smartFormSearch").setVisible(false);
+            this.getView().byId("idVerticalLayoutBingSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
@@ -1258,6 +1260,7 @@ sap.ui.controller("copilot.copilot", {
         }
         if (sKey === "Match") {
             this.getView().byId("smartFormSearch").setVisible(false);
+            this.getView().byId("idVerticalLayoutBingSearch").setVisible(false);
             this.getView().byId("smartTable").setVisible(true);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
@@ -1273,8 +1276,9 @@ sap.ui.controller("copilot.copilot", {
 
         }
 
-        if(sKey === "OpenSearch"){
+        if (sKey === "OpenSearch") {
             this.getView().byId("smartFormSearch").setVisible(true);
+            this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(false);
             this.getView().byId("OwnershipTableId").setVisible(false);
@@ -1287,6 +1291,15 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("_IDGenFeedInput2").setVisible(true);
             this.getView().byId("_IDGenList2").setVisible(true);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
+
+        var data = this.getView().getModel("pf12").getData();
+        if(data){
+            var oModel = new sap.ui.model.json.JSONModel();
+            stringData = JSON.stringify(data);
+            this.onLLM(null, false, stringData, "With the Above Data, Can we get above question and answer phrase in order?", false, "pf13", oModel, true);
+        }else{
+            sap.m.MessageToast.show("No Data found with Bing Search");
+        }
         }
 
     },
@@ -1350,7 +1363,7 @@ sap.ui.controller("copilot.copilot", {
             }
 
         } else {
-             
+
             sValue = sData + ". " + sQuestion;
 
         }
@@ -1437,14 +1450,14 @@ sap.ui.controller("copilot.copilot", {
 
     onIndustryClassfication: function () {
         if (!this.objDialog) {
-           
+
             this.objDialog = sap.ui.xmlfragment("copilot.fragmentViews.legalIndustrial", this);
             this.getView().addDependent(this.objDialog);
-            
+
         }
         if (this.getView().getModel("pf10")) {
             this.objDialog.open();
-            
+
 
         } else {
             sap.m.MessageToast.show("Please wait, data is loading");
@@ -1488,7 +1501,7 @@ sap.ui.controller("copilot.copilot", {
         } else {
             return "None"; // no highlight
         }
-        
+
         // if (sPercentage > 1) {
         //     sPercentage = sPercentage / 100;
         // }
@@ -1536,8 +1549,8 @@ sap.ui.controller("copilot.copilot", {
         //     }
 
         // } else {
-            // Handle invalid or non-numeric values
-            // return sPercentage;
+        // Handle invalid or non-numeric values
+        // return sPercentage;
         // }
 
     },
@@ -1561,6 +1574,9 @@ sap.ui.controller("copilot.copilot", {
                         var moodys = keyVal[i].KeyDecryptValue;
                     case "SANCTION360":
                         this.getOwnerComponent()._sanctionTokenAPI = keyVal[i].KeyDecryptValue;
+
+                    case "OPENAI":
+                        this.getOwnerComponent()._openAI = keyVal[i].KeyDecryptValue;
                 }
             }
             if (!this.getOwnerComponent()._sanctionTokenAPI) {
