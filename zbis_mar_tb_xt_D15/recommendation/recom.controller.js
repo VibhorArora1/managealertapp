@@ -207,37 +207,71 @@ sap.ui.controller('recommendation.recom', {
     var finalJSON = finalData[0]
     var isMessageBoxCalled = false // Flag variable
 
-    // Check if any of the selected items have a status of 'Open'
-    oSelectionPath.forEach(function (path) {
-      if (isMessageBoxCalled) {
-        return // Exit the forEach loop if MessageBox is already called
-      }
 
-      var selectedItem = oModel.getProperty(path)
+// Check if any of the selected items have a status of 'Open'
+oSelectionPath.forEach(function (path) {
 
-      if (selectedItem.Status == 'Open') {
-        sap.m.MessageBox.warning(
-          'There are open address screening hits for your alerts. Clicking on OK will submit them.',
-          {
-            actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
-            //  emphasizedAction: MessageBox.Action.OK,
-            onClose: function (sAction) {
-              if (sAction === sap.m.MessageBox.Action.OK) {
-                // Complete Item
-                that.completeItem(finalJSON, oModel, oSelectionPath);
-              } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
-                return;
-              }
-            }.bind(this)
-          }
-        )
-        isMessageBoxCalled = true // Set the flag variable to true
-      }
-      else {
-        // Complete Item
-        that.completeItem(finalJSON, oModel, oSelectionPath);
-      }
-    })
+  var selectedItem = oModel.getProperty(path);
+
+  if (selectedItem.Status == 'Open') {
+    var openItem = true;
+  }
+});
+
+if (!openItem) {  // Complete Item
+  that.completeItem(finalJSON, oModel, oSelectionPath);
+}
+else
+{
+  sap.m.MessageBox.warning(
+    'There are open address screening hits for your alerts. Clicking on OK will submit them.',
+    {
+      actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+      //  emphasizedAction: MessageBox.Action.OK,
+      onClose: function (sAction) {
+        if (sAction === sap.m.MessageBox.Action.OK) {
+          // Complete Item
+          that.completeItem(finalJSON, oModel, oSelectionPath);
+        } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
+          return;
+        }
+      }.bind(this)
+    }
+  )
+
+}
+
+//    Check if any of the selected items have a status of 'Open'
+    // oSelectionPath.forEach(function (path) {
+    //   if (isMessageBoxCalled) {
+    //     return // Exit the forEach loop if MessageBox is already called
+    //   }
+
+    //   var selectedItem = oModel.getProperty(path)
+
+    //   if (selectedItem.Status == 'Open') {
+    //     sap.m.MessageBox.warning(
+    //       'There are open address screening hits for your alerts. Clicking on OK will submit them.',
+    //       {
+    //         actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+    //         //  emphasizedAction: MessageBox.Action.OK,
+    //         onClose: function (sAction) {
+    //           if (sAction === sap.m.MessageBox.Action.OK) {
+    //             // Complete Item
+    //             that.completeItem(finalJSON, oModel, oSelectionPath);
+    //           } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
+    //             return;
+    //           }
+    //         }.bind(this)
+    //       }
+    //     )
+    //     isMessageBoxCalled = true // Set the flag variable to true
+    //   }
+    //   else {
+    //     // Complete Item
+    //     that.completeItem(finalJSON, oModel, oSelectionPath);
+    //   }
+    // })
   }
 })
 
