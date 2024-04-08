@@ -349,41 +349,96 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						pid: guid
 					},
 					success: async function (response) {
-						that.iterationChatHub(generatedValues, that,response, guid, guid1, aResult, oResut);
+						that.iterationChatHub(generatedValues, that, response, guid, guid1, aResult, oResut);
 					}
 
 				});
 			},
 
-			iterationChatHub: async function (generatedValues,that,response, guid, guid1, aResult, oResut){
+			iterationChatHub: async function (generatedValues, that, response, guid, guid1, aResult, oResut) {
 				var i = 0; // Initialize index variable
-						var chatHubCallback = async function () {
-							if (i < generatedValues.length) {
-								const connection = new signalR.HubConnectionBuilder()
-									.withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
-										skipNegotiation: true,
-										transport: 1,
-										// Specify the allowed origin
-										withCredentials: false
-									})
-									.withAutomaticReconnect()
-									.build();
-								await connection.start().then(async function () {
-									await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut).then(async function () {
-										// Stop the connection after each iteration
-										// oResut.push(aResult);
-										aResult.push(oResut);
-										i++; // Increment index after processing each chatHub call
-										await connection.stop();
-										chatHubCallback();
-									});
-									// Call the chatHubCallback recursively for the next iteration
-								}).catch(function (err) {
-									return console.error(err.toString());
-								});
+				var chatHubCallback = async function () {
+					if (i < generatedValues.length) {
+						const connection = new signalR.HubConnectionBuilder()
+							.withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+								skipNegotiation: true,
+								transport: 1,
+								// Specify the allowed origin
+								withCredentials: false
+							})
+							.withAutomaticReconnect()
+							.build();
+						await connection.start().then(async function () {
+
+							if (i === 0) {
+								var session = true
+							} else {
+								session = false;
 							}
-						};
-						chatHubCallback(); // Call the chatHubCallback for the first iteration	
+
+							const initialMessage = {
+								source: "BingApiProd",
+								isStartOfSession: session,
+								requestId: guid,
+								conversationSignature: response.conversationSignature,
+								conversationId: response.conversationId,
+								participant: { id: response.participantId },
+								message: {
+									text: generatedValues + "Answer in less than 50 words and be precise",
+									author: "user",
+									inputMethod: "Keyboard",
+									requestId: guid,
+									messageId: guid1,
+									market: "en-US",
+									MessageType: "Chat"
+								},
+								optionSets: ['stream_writes', 'flux_prompt_v1'],
+							};
+
+							await connection.stream("Chat", initialMessage).subscribe({
+								 complete: () => {
+
+									// connection.stop()
+									console.log("Stream completed");
+									that.connectionStop(connection);
+									// await connection.stop();
+									i++; // Increment index after processing each chatHub call
+									chatHubCallback();
+
+								},
+								next: function (response) {
+									console.log("Received message:", response);
+									oResut.question = generatedValues;
+									oResut.answer = response.result.message;
+									aResult.push(oResut);
+									
+								},
+								error: (err) => {
+									console.error("Error:", err);
+
+								}
+							});
+
+
+
+							// await that.chatHub(connection, generatedValues[i], guid, guid1, response, i, aResult, oResut).then(async function () {
+							// 	// Stop the connection after each iteration
+							// 	aResult.push(oResut);
+							// 	i++; // Increment index after processing each chatHub call
+							// 	await connection.stop();
+							// 	chatHubCallback();
+							// });
+							// Call the chatHubCallback recursively for the next iteration
+						}).catch(function (err) {
+							return console.error(err.toString());
+						});
+					}
+				};
+				chatHubCallback(); // Call the chatHubCallback for the first iteration	
+			},
+
+			connectionStop: async function (connection) {
+				await connection.stop();
 			},
 
 			chatHub: async function (connection, generatedValues, guid, guid1, response, i, aResult, oResut) {
