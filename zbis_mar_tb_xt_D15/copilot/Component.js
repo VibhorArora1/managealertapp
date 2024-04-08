@@ -85,7 +85,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("_IDGenList1").setVisible(false);
 							view.byId("sanctionTabVerticalID").setVisible(false);
 							view.byId("smartFormSearch").setVisible(false);
-							view.byId("idVerticalLayoutBingSearch").setVisible(true);
+							view.byId("idVerticalLayoutBingSearch").setVisible(false);
 							var oIconTabBar = view.byId("idIconTabBar");
 							if (oIconTabBar) {
 
@@ -365,6 +365,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 			iterationChatHub: async function (generatedValues, that, response, guid, guid1, aResult, oResut) {
 				var i = 0; // Initialize index variable
+				var view = that.oView;
 				var chatHubCallback = async function () {
 					if (i < generatedValues.length) {
 						const connection = new signalR.HubConnectionBuilder()

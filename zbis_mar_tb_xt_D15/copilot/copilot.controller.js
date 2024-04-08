@@ -1277,34 +1277,32 @@ sap.ui.controller("copilot.copilot", {
         }
 
         if (sKey === "OpenSearch") {
-            this.getView().byId("smartFormSearch").setVisible(false);
-            this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
-            this.getView().byId("smartTable").setVisible(false);
-            this.getView().byId("smartFormColumn").setVisible(false);
-            this.getView().byId("OwnershipTableId").setVisible(false);
-            this.getView().byId("smartFormColumn1").setVisible(false);
-            this.getView().byId("_IDGenFeedInput1").setVisible(false);
-            this.getView().byId("idVerticalLayoutSanction").setVisible(false);
-            this.getView().byId("idVerticalLayoutOwnership").setVisible(false);
-            this.getView().byId("_IDGenList1").setVisible(false);
-            this.getView().byId("smartFormColumn2").setVisible(true);
-            this.getView().byId("_IDGenFeedInput2").setVisible(true);
-            this.getView().byId("_IDGenList2").setVisible(true);
-            this.getView().byId("sanctionTabVerticalID").setVisible(false);
-
             if (this.getView().getModel("pf12")) {
                 var data = this.getView().getModel("pf12").getData();
                 if (data) {
                     var oModel = new sap.ui.model.json.JSONModel();
                     stringData = JSON.stringify(data);
                     this.onLLM(null, false, stringData, "With the Above Data, Can we get above question and answer phrase in order?", false, "pf13", oModel, true);
+                    this.getView().byId("smartFormSearch").setVisible(false);
+                    this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
+                    this.getView().byId("smartTable").setVisible(false);
+                    this.getView().byId("smartFormColumn").setVisible(false);
+                    this.getView().byId("OwnershipTableId").setVisible(false);
+                    this.getView().byId("smartFormColumn1").setVisible(false);
+                    this.getView().byId("_IDGenFeedInput1").setVisible(false);
+                    this.getView().byId("idVerticalLayoutSanction").setVisible(false);
+                    this.getView().byId("idVerticalLayoutOwnership").setVisible(false);
+                    this.getView().byId("_IDGenList1").setVisible(false);
+                    this.getView().byId("smartFormColumn2").setVisible(true);
+                    this.getView().byId("_IDGenFeedInput2").setVisible(true);
+                    this.getView().byId("_IDGenList2").setVisible(true);
+                    this.getView().byId("sanctionTabVerticalID").setVisible(false);
                 } else {
                     sap.m.MessageToast.show("No Data found with Bing Search");
                 }
-            }else{
+            } else {
                 sap.m.MessageToast.show("Data Still Loading Please wait...");
-                var oIconTabBar = this.getView().byId("idIconTabBar");
-                oIconTabBar.setSelectedKey("Match");
+
             }
         }
 
