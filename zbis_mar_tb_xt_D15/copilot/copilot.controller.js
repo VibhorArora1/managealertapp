@@ -1285,7 +1285,7 @@ sap.ui.controller("copilot.copilot", {
                 if (data) {
                     var oModel = new sap.ui.model.json.JSONModel();
                     stringData = JSON.stringify(data);
-                    this.onLLM(null, false, stringData, "With the Above Data, Can we get above question and answer phrase in order?", false, "pf13", oModel, true);
+                    this.onLLM(null, false, stringData, "With the Above Data, Can we get above question and answer phrase in order?", false, "pf13", oModel, true, true);
                     this.getView().byId("smartFormSearch").setVisible(false);
                     this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
                     this.getView().byId("smartTable").setVisible(false);
@@ -1324,7 +1324,7 @@ sap.ui.controller("copilot.copilot", {
         this.onLLM(null, false, this.getOwnerComponent()._companyOwnerShipDataString, "With above data tell me about the sanction in summary format(points) highlighting the important notes?", false, "pf5", oModel2, true);
     },
 
-    onLLM: function (oEvent, saveToModel, sData, sQuestion, sDisplayText, sBindingModel, sModel, sBusy) {
+    onLLM: function (oEvent, saveToModel, sData, sQuestion, sDisplayText, sBindingModel, sModel, sBusy,array) {
 
         var oDisplay = [];
         var oFeedDisplay = { FeedInput: [] };
@@ -1449,11 +1449,22 @@ sap.ui.controller("copilot.copilot", {
                         sap.m.MessageToast.show(data.error.message);
                         return;
                     }
+                    if(!array){
                     var aData1 = {
                         "Sanction": data.choices[0].message.content,
                     }
                     sModel.setData(aData1);
                     oView.setModel(sModel, sBindingModel);
+                    
+                }else{
+                    oFeedDisplay = { FeedInput: [] };
+                    aDisplayText.text = data.choices[0].message.content;
+                    aDisplayText.sender = "Bot"
+                    oFeedDisplay.push(aDisplayText);
+                    sModel.setData(oFeedDisplay);
+                    oView.setModel(sModel, sBindingModel);
+                }
+                    
                 }
             });
     },

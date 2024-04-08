@@ -240,8 +240,9 @@
 	</l:VerticalLayout>
 
 
-<List id="_IDGenList3" showSeparators="Inner" items="{pf13>/}" visible="false">
-                <FeedListItem id="_IDGenFeedListItem3" iconDensityAware="false" info="Reply" text="{pf13>Sanction}"
+<List id="_IDGenList3" showSeparators="Inner" items="{pf13>/FeedInput}" visible="false">
+                <FeedListItem id="_IDGenFeedListItem3" iconDensityAware="false" sender="{pf13>sender}" 
+      text="{pf13>text}"
       convertLinksToAnchorTags="All" />
       </List>
   <smartForm:SmartForm id="smartFormColumn2"
