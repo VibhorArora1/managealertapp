@@ -404,13 +404,13 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							};
 
 							await connection.stream("Chat", initialMessage).subscribe({
-								 complete: (log) => {
+								 complete: () => {
 
 									// connection.stop()
 									
 									console.log("Stream completed");
 									that.connectionStop(connection);
-									console.log(log);
+									
 								},
 								next: function (response) {
 									console.log("Received message:", response);
