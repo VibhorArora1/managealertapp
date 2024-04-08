@@ -1310,6 +1310,8 @@ sap.ui.controller("copilot.copilot", {
                 }
             } else {
                 sap.m.MessageToast.show("Data Still Loading Please wait...");
+                var oIconTabBar = view.byId("idIconTabBar");
+                oIconTabBar.setSelectedKey("Match");
 
             }
         }
