@@ -385,6 +385,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							}
 
 							const initialMessage = {
+								// source: "BingApiTest",
+								// allowedMessageTypes: DEFAULT_ALLOWED_MESSAGE_TYPES,
 								source: "BingApiProd",
 								isStartOfSession: session,
 								requestId: guid,
@@ -392,7 +394,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
 								message: {
-									text: generatedValues,
+									text: generatedValues + "Answer should be precise",
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
