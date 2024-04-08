@@ -120,6 +120,7 @@ sap.ui.define(
           item.AI_close_reason = input[i].AI_CLOSE_REASON // Copy the AI_close_reason from the input element
           item.AI_Recommendation = input[i].AI_RECOMMENDATION // Copy the AI_Recommendation from the input element
           item.Status = input[i].STATUS // Copy the Status from the input element
+          item.Entity_ID = input[i].ENTITY_ID // Copy the Entity_ID from the input element
           map[itemDBKey].push(item) // Push the item to the corresponding array in the map object
         }
 
