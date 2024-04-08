@@ -1277,7 +1277,7 @@ sap.ui.controller("copilot.copilot", {
         }
 
         if (sKey === "OpenSearch") {
-            this.getView().byId("smartFormSearch").setVisible(true);
+            this.getView().byId("smartFormSearch").setVisible(false);
             this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
             this.getView().byId("smartTable").setVisible(false);
             this.getView().byId("smartFormColumn").setVisible(false);
