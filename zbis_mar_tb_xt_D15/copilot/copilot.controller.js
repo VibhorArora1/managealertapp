@@ -1240,7 +1240,6 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn2").setVisible(false);
             this.getView().byId("_IDGenFeedInput2").setVisible(false);
             this.getView().byId("_IDGenList2").setVisible(false);
-            this.getView().byId("_IDGenFeedInput3").setVisible(false);
             this.getView().byId("_IDGenList3").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(true);
         }
@@ -1258,7 +1257,6 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn2").setVisible(false);
             this.getView().byId("_IDGenFeedInput2").setVisible(false);
             this.getView().byId("_IDGenList2").setVisible(false);
-            this.getView().byId("_IDGenFeedInput3").setVisible(false);
             this.getView().byId("_IDGenList3").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
         }
@@ -1276,7 +1274,6 @@ sap.ui.controller("copilot.copilot", {
             this.getView().byId("smartFormColumn2").setVisible(false);
             this.getView().byId("_IDGenFeedInput2").setVisible(false);
             this.getView().byId("_IDGenList2").setVisible(false);
-            this.getView().byId("_IDGenFeedInput3").setVisible(false);
             this.getView().byId("_IDGenList3").setVisible(false);
             this.getView().byId("sanctionTabVerticalID").setVisible(false);
 
@@ -1302,7 +1299,6 @@ sap.ui.controller("copilot.copilot", {
                     this.getView().byId("smartFormColumn2").setVisible(true);
                     this.getView().byId("_IDGenFeedInput2").setVisible(true);
                     this.getView().byId("_IDGenList2").setVisible(true);
-                    this.getView().byId("_IDGenFeedInput3").setVisible(true);
                     this.getView().byId("_IDGenList3").setVisible(true);
                     this.getView().byId("sanctionTabVerticalID").setVisible(false);
                 } else {
