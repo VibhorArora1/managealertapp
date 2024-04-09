@@ -397,7 +397,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
 								message: {
-									text: generatedValues + "Answer should be precise",
+									text: generatedValues[i] + " Answer should be precise",
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
@@ -415,6 +415,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 									console.log("Stream completed");
 									that.connectionStop(connection);
+									chatHubCallback(); // Call the chatHubCallback for the next iteration
 
 								},
 								next: function (response) {
