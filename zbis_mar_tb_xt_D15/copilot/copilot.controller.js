@@ -1306,7 +1306,7 @@ sap.ui.controller("copilot.copilot", {
                 }
             } else {
                 sap.m.MessageToast.show("Data Still Loading Please wait...");
-                var oIconTabBar = view.byId("idIconTabBar");
+                var oIconTabBar = this.getView().byId("idIconTabBar");
                 oIconTabBar.setSelectedKey("Match");
 
             }
@@ -1324,7 +1324,7 @@ sap.ui.controller("copilot.copilot", {
         this.onLLM(null, false, this.getOwnerComponent()._companyOwnerShipDataString, "With above data tell me about the sanction in summary format(points) highlighting the important notes?", false, "pf5", oModel2, true);
     },
 
-    onLLM: function (oEvent, saveToModel, sData, sQuestion, sDisplayText, sBindingModel, sModel, sBusy,array) {
+    onLLM: function (oEvent, saveToModel, sData, sQuestion, sDisplayText, sBindingModel, sModel, sBusy, array) {
 
         var oDisplay = [];
         var oFeedDisplay = { FeedInput: [] };
@@ -1449,22 +1449,22 @@ sap.ui.controller("copilot.copilot", {
                         sap.m.MessageToast.show(data.error.message);
                         return;
                     }
-                    if(!array){
-                    var aData1 = {
-                        "Sanction": data.choices[0].message.content,
+                    if (!array) {
+                        var aData1 = {
+                            "Sanction": data.choices[0].message.content,
+                        }
+                        sModel.setData(aData1);
+                        oView.setModel(sModel, sBindingModel);
+
+                    } else {
+                        oFeedDisplay = { FeedInput: [] };
+                        aDisplayText.text = data.choices[0].message.content;
+                        aDisplayText.sender = "Bot"
+                        oFeedDisplay.FeedInput.push(aDisplayText);
+                        sModel.setData(oFeedDisplay);
+                        oView.setModel(sModel, sBindingModel);
                     }
-                    sModel.setData(aData1);
-                    oView.setModel(sModel, sBindingModel);
-                    
-                }else{
-                    oFeedDisplay = { FeedInput: [] };
-                    aDisplayText.text = data.choices[0].message.content;
-                    aDisplayText.sender = "Bot"
-                    oFeedDisplay.push(aDisplayText);
-                    sModel.setData(oFeedDisplay);
-                    oView.setModel(sModel, sBindingModel);
-                }
-                    
+
                 }
             });
     },
