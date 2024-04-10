@@ -387,7 +387,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							} else {
 								session = false;
 							}
-
+							var generatedValuesStr = JSON.stringify(generatedValues);
 							const initialMessage = {
 								// source: "BingApiTest",
 								// allowedMessageTypes: DEFAULT_ALLOWED_MESSAGE_TYPES,
@@ -398,7 +398,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
 								message: {
-									text: generatedValues[i] + " Answer should be precise?",
+									text: generatedValuesStr + " for the above question answer precisely?",
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
@@ -416,8 +416,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 									console.log("Stream completed");
 									that.connectionStop(connection);
-									i++; // Increment the index variable
-									chatHubCallback(); // Call the chatHubCallback for the next iteration
+									// i++; // Increment the index variable
+									// chatHubCallback(); // Call the chatHubCallback for the next iteration
 
 								},
 								next: function (response) {
@@ -425,8 +425,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									oResut.question = generatedValues;
 									oResut.answer = response.result.message;
 									aResult.push(oResut);
-									
-
+									var JSONoModelBing = new sap.ui.model.json.JSONModel(aResult);
+									view.setModel(JSONoModelBing, "pf12");
 								},
 								error: (err) => {
 									console.error("Error:", err);
@@ -436,10 +436,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						}).catch(function (err) {
 							return console.error(err.toString());
 						});
-					}else{
-						var JSONoModelBing = new sap.ui.model.json.JSONModel(aResult);
-						view.setModel(JSONoModelBing, "pf12");
 					}
+
 				};
 				chatHubCallback(); // Call the chatHubCallback for the first iteration	
 			},
