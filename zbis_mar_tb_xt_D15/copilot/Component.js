@@ -416,6 +416,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 									console.log("Stream completed");
 									that.connectionStop(connection);
+									i++; // Increment the index variable
 									chatHubCallback(); // Call the chatHubCallback for the next iteration
 
 								},
@@ -424,8 +425,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									oResut.question = generatedValues;
 									oResut.answer = response.result.message;
 									aResult.push(oResut);
-									var JSONoModelBing = new sap.ui.model.json.JSONModel(aResult);
-									view.setModel(JSONoModelBing, "pf12");
+									
 
 								},
 								error: (err) => {
@@ -436,6 +436,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						}).catch(function (err) {
 							return console.error(err.toString());
 						});
+					}else{
+						var JSONoModelBing = new sap.ui.model.json.JSONModel(aResult);
+						view.setModel(JSONoModelBing, "pf12");
 					}
 				};
 				chatHubCallback(); // Call the chatHubCallback for the first iteration	
