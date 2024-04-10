@@ -324,6 +324,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 						},
 						error: function (jqXHR, textStatus, errorThrown) {
+							that.oBusy.close();
 							oBusyTable.setBusy(false);
 							console.error("Error:", errorThrown);
 						}
@@ -397,7 +398,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
 								message: {
-									text: generatedValues[i] + " Answer should be precise",
+									text: generatedValues[i] + " Answer should be precise?",
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
