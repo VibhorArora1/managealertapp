@@ -112,7 +112,7 @@ sap.ui.controller("copilot.copilot", {
             s4() + '-' + s4() + s4() + s4();
     },
 
-    getConnetion: async function () {
+    getBingResult: async function (sValue, result) {
         var that = this;
         this.getOwnerComponent()._guid = this.generateGUID();
         this.getOwnerComponent()._guid1 = this.generateGUID();
@@ -120,7 +120,7 @@ sap.ui.controller("copilot.copilot", {
             url: "https://www.bingapis.com/api/v1/chat/create",
             type: "GET",
             data: {
-                appid: "43B4D75BDEB98FC28A3AF5A8C3D2F430A64F3A0C",
+                appid: this.getOwnerComponent()._bingAPI,
                 pid: this.getOwnerComponent()._guid
             },
             success: function (response) {
@@ -130,12 +130,10 @@ sap.ui.controller("copilot.copilot", {
                     .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
                         skipNegotiation: true,
                         transport: 1,
-                        // Specify the allowed origin
                         withCredentials: false
                     })
                     .withAutomaticReconnect()
                     .build();
-                connection.logging = true;
                 const initialMessage = {
                     // source: "BingApiTest",
                     // allowedMessageTypes: DEFAULT_ALLOWED_MESSAGE_TYPES,
@@ -146,7 +144,7 @@ sap.ui.controller("copilot.copilot", {
                     conversationId: that.getOwnerComponent()._response.conversationId,
                     participant: { id: that.getOwnerComponent()._response.participantId },
                     message: {
-                        text: "Tell me about SAP?",
+                        text: sValue,
                         author: "user",
                         inputMethod: "Keyboard",
                         requestId: that.getOwnerComponent()._guid,
@@ -167,10 +165,7 @@ sap.ui.controller("copilot.copilot", {
                             connection.stop()
                         },
                         next: function (response) {
-                            console.log("Received message:", response);
-                            // for (var message of response.messages) {
-                            console.log("Received message:", message);
-                            // }
+                            result = response.result.message;
                         },
                         error: (err) => {
                             console.error("Error:", err);
@@ -198,7 +193,7 @@ sap.ui.controller("copilot.copilot", {
             oView.getModel("pf10").setData(null);
         }
 
-        // this.getConnetion();
+
 
 
         // Get the Path
@@ -1284,8 +1279,10 @@ sap.ui.controller("copilot.copilot", {
                 var data = this.getView().getModel("pf12").getData();
                 if (data) {
                     var oModel = new sap.ui.model.json.JSONModel();
-                    stringData = JSON.stringify(data);
-                    this.onLLM(null, false, stringData, "With the Above Data, Can we get above question and answer phrase in order?", false, "pf13", oModel, true, true);
+                    if (!this.getView().getModel("pf13")) {
+                        stringData = JSON.stringify(data);
+                        this.onLLM(null, false, stringData, "for the Above Data, phrase the data in order like first question then first answer. Remove unwanted data and Highlight things with are in * ?", false, "pf13", oModel, true, true);
+                    }
                     this.getView().byId("smartFormSearch").setVisible(false);
                     this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
                     this.getView().byId("smartTable").setVisible(false);
@@ -1419,7 +1416,7 @@ sap.ui.controller("copilot.copilot", {
             },
             body: JSON.stringify({
                 messages,
-                max_tokens: 400,
+                max_tokens: 500,
                 model: "gpt-3.5-turbo"
             })
         }).then(response => response.json())
@@ -1467,6 +1464,103 @@ sap.ui.controller("copilot.copilot", {
 
                 }
             });
+    },
+
+    onBingSearch: function (oEvent) {
+        var sValue = oEvent.getParameter("value");
+        var that = this;
+        var oDisplay = [];
+        var oFeedDisplay = { FeedInput: [] };
+        var aDisplay = {};
+        var aDisplayText = {};
+        var that = this;
+        oBusy = new sap.m.BusyDialog();
+        oBusy.open();
+        aDisplay.text = sValue;
+        aDisplay.sender = "User";
+        this.getOwnerComponent()._bingNumber = this.getOwnerComponent()._bingNumber + 1
+        aDisplay.Number = this.getOwnerComponent()._bingNumber;
+        oFeedDisplay.FeedInput.push(aDisplay);
+
+        this.getOwnerComponent()._guid = this.generateGUID();
+        this.getOwnerComponent()._guid1 = this.generateGUID();
+        $.ajax({
+            url: "https://www.bingapis.com/api/v1/chat/create",
+            type: "GET",
+            data: {
+                appid: this.getOwnerComponent()._bingAPI,
+                pid: this.getOwnerComponent()._guid
+            },
+            success: function (response) {
+                console.log(response);
+                that.getOwnerComponent()._response = response;
+                const connection = new signalR.HubConnectionBuilder()
+                    .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+                        skipNegotiation: true,
+                        transport: 1,
+                        withCredentials: false
+                    })
+                    .withAutomaticReconnect()
+                    .build();
+                const initialMessage = {
+                    // source: "BingApiTest",
+                    // allowedMessageTypes: DEFAULT_ALLOWED_MESSAGE_TYPES,
+                    source: "BingApiProd",
+                    isStartOfSession: true,
+                    requestId: that.getOwnerComponent()._guid,
+                    conversationSignature: that.getOwnerComponent()._response.conversationSignature,
+                    conversationId: that.getOwnerComponent()._response.conversationId,
+                    participant: { id: that.getOwnerComponent()._response.participantId },
+                    message: {
+                        text: sValue,
+                        author: "user",
+                        inputMethod: "Keyboard",
+                        requestId: that.getOwnerComponent()._guid,
+                        messageId: that.getOwnerComponent()._guid1,
+                        market: "en-US",
+                        MessageType: "Chat"
+                    },
+                    optionSets: ['stream_writes', 'flux_prompt_v1'],
+                };
+                connection.on("send", initialMessage => {
+                    console.log(initialMessage);
+                });
+
+                connection.start().then(function () {
+                    console.log("Connected!");
+                    connection.stream("Chat", initialMessage).subscribe({
+                        complete: () => {
+                            connection.stop();
+                            oBusy.close();
+                        },
+                        next: function (response) {
+
+                            aDisplayText.text = response.result.message;;
+                            aDisplayText.sender = "Bing"
+                            that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
+                            aDisplayText.Number = that.getOwnerComponent()._bingNumber;
+                            aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
+                            oFeedDisplay.FeedInput.push(aDisplayText);
+                            var oBingJSONModel = new sap.ui.model.json.JSONModel();
+                            oFeedDisplay.FeedInput.sort(function (a, b) {
+                                return b.Number - a.Number;
+                            });
+                            oBingJSONModel.setData(oFeedDisplay);
+                            oView.setModel(oBingJSONModel, "pf14");
+                        },
+                        error: (err) => {
+                            oBusy.close();
+                            console.error("Error:", err);
+
+                        }
+                    });
+                });
+
+            }, error: function (error) {
+                oBusy.close();
+                console.error("Error:", error);
+            }
+        });
     },
 
     onIndustryClassfication: function () {
@@ -1522,29 +1616,6 @@ sap.ui.controller("copilot.copilot", {
         } else {
             return "None"; // no highlight
         }
-
-        // if (sPercentage > 1) {
-        //     sPercentage = sPercentage / 100;
-        // }
-        // // Set highlight state based on percentage
-        // var percentage = parseFloat(sPercentage);
-        // if (percentage > 1) {
-        //     if (percentage >= 0 && percentage <= 50) {
-        //         return "Warning"; // predefined highlight state for red
-        //     } else if (percentage > 50) {
-        //         return "Error"; // predefined highlight state for green
-        //     } else {
-        //         return "None"; // no highlight
-        //     }
-        // } else {
-        //     if (percentage >= 0 && percentage <= .50) {
-        //         return "Warning"; // predefined highlight state for red
-        //     } else if (percentage > .50) {
-        //         return "Error"; // predefined highlight state for green
-        //     } else {
-        //         return "None"; // no highlight
-        //     }
-        // }
     },
     formatDate: function (sDate) {
         // Implement date formatting logic if needed
@@ -1554,25 +1625,6 @@ sap.ui.controller("copilot.copilot", {
     getNumberValueForPercentage: function (sPercentage) {
         sPercentage = parseFloat(sPercentage).toFixed(2);
         return sPercentage;
-        // if (!isNaN(sPercentage)) {
-        //     if (sPercentage < 1) {
-        //         sPercentage = sPercentage * 100;
-        //         sPercentage = parseFloat(sPercentage).toFixed(2);
-        //         return sPercentage;
-        //     } else {
-        //         if (sPercentage > 100) {
-        //             sPercentage = 100;
-        //             return sPercentage;
-        //         } else {
-        //             sPercentage = parseFloat(sPercentage).toFixed(2);
-        //             return sPercentage;
-        //         }
-        //     }
-
-        // } else {
-        // Handle invalid or non-numeric values
-        // return sPercentage;
-        // }
 
     },
 
@@ -1595,19 +1647,18 @@ sap.ui.controller("copilot.copilot", {
                         var moodys = keyVal[i].KeyDecryptValue;
                     case "SANCTION360":
                         this.getOwnerComponent()._sanctionTokenAPI = keyVal[i].KeyDecryptValue;
-
+                    case "BINGAPI":
+                        this.getOwnerComponent()._bingAPI = keyVal[i].KeyDecryptValue;
                     case "OPENAI":
                         this.getOwnerComponent()._openAI = keyVal[i].KeyDecryptValue;
                 }
             }
             if (!this.getOwnerComponent()._sanctionTokenAPI) {
                 sap.m.MessageToast.show("Please check the API Key for Sanction360");
-                this.cleanSlate(view);
                 return;
             }
             if (!moodys) {
                 sap.m.MessageToast.show("Please check the API Key for Moody's");
-                this.cleanSlate(view);
                 return;
             }
             var password = moodys;

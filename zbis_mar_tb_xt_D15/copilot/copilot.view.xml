@@ -250,10 +250,10 @@
 			 title="Bing Open Search"
       visible="false"
 			/>
- <FeedInput id="_IDGenFeedInput2"  post="onLLM" icon="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png" class="sapUiSmallMarginTopBottom" placeholder="Ask me Anything" visible="false"/>
-            <List id="_IDGenList2" showSeparators="Inner" items="{pf13>/FeedInput}" visible="false">
-                <FeedListItem id="_IDGenFeedListItem2" iconDensityAware="false" info="Reply" sender="{pf13>sender}" icon="{pf13>icon}"
-      text="{pf13>text}"
+ <FeedInput id="_IDGenFeedInput2"  post="onBingSearch" icon="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png" class="sapUiSmallMarginTopBottom" placeholder="Ask me Anything" visible="false"/>
+            <List id="_IDGenList2" showSeparators="Inner" items="{pf14>/FeedInput}" visible="false">
+                <FeedListItem id="_IDGenFeedListItem2" iconDensityAware="false" info="Reply" sender="{pf14>sender}" icon="{pf14>icon}"
+      text="{pf14>text}"
       convertLinksToAnchorTags="All" />
       </List>
               </content>

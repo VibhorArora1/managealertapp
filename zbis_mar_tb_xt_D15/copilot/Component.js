@@ -535,11 +535,15 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				}
 				if (view.getModel("pf12")) {
 					view.getModel("pf12").setData(null);
-
-					if (view.getModel("pf13")) {
-						view.getModel("pf13").setData(null);
-					}
 				}
+
+				if (view.getModel("pf13")) {
+					view.getModel("pf13").setData(null);
+				}
+				if (view.getModel("pf14")) {
+					view.getModel("pf14").setData(null);
+				}
+
 			}
 		});
 	});
