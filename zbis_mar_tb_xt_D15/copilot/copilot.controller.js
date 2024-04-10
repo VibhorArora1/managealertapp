@@ -1281,8 +1281,8 @@ sap.ui.controller("copilot.copilot", {
                 if (data) {
                     var oModel = new sap.ui.model.json.JSONModel();
                     var modelLoad = this.getView().getModel("pf13");
-                    if(modelLoad){
-                        if(modelLoad.getData()){
+                    if (modelLoad) {
+                        if (modelLoad.getData()) {
                             run = false;
                         }
                     }
@@ -1306,11 +1306,13 @@ sap.ui.controller("copilot.copilot", {
                     this.getView().byId("_IDGenList3").setVisible(true);
                     this.getView().byId("sanctionTabVerticalID").setVisible(false);
                 } else {
-                    sap.m.MessageToast.show("No Data found with Bing Search");
+                    sap.m.MessageToast.show("Data Still Loading Please wait...");
+                    var oIconTabBar = this.getView().byId("idIconTabBar");
+                    oIconTabBar.setSelectedKey("Match");
                 }
             } else {
                 sap.m.MessageToast.show("Data Still Loading Please wait...");
-                var oIconTabBar = this.getView().byId("idIconTabBar");
+                oIconTabBar = this.getView().byId("idIconTabBar");
                 oIconTabBar.setSelectedKey("Match");
 
             }
@@ -1489,6 +1491,15 @@ sap.ui.controller("copilot.copilot", {
         this.getOwnerComponent()._bingNumber = this.getOwnerComponent()._bingNumber + 1
         aDisplay.Number = this.getOwnerComponent()._bingNumber;
         oFeedDisplay.FeedInput.push(aDisplay);
+
+        oCommentModel = this.getView().getModel("pf14");
+        if (oCommentModel) {
+            if (oCommentModel.getData()) {
+                for (var i = 0; i < oCommentModel.getData().FeedInput.length; i++) {
+                    oFeedDisplay.FeedInput.push(oCommentModel.FeedInput[i]);
+                }
+            }
+        }
 
         this.getOwnerComponent()._guid = this.generateGUID();
         this.getOwnerComponent()._guid1 = this.generateGUID();
