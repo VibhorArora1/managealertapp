@@ -1275,13 +1275,20 @@ sap.ui.controller("copilot.copilot", {
         }
 
         if (sKey === "OpenSearch") {
+            var run = true;
             if (this.getView().getModel("pf12")) {
                 var data = this.getView().getModel("pf12").getData();
                 if (data) {
                     var oModel = new sap.ui.model.json.JSONModel();
-                    if (!this.getView().getModel("pf13")) {
+                    var modelLoad = this.getView().getModel("pf13");
+                    if(modelLoad){
+                        if(modelLoad.getData()){
+                            run = false;
+                        }
+                    }
+                    if (run) {
                         stringData = JSON.stringify(data);
-                        this.onLLM(null, false, stringData, "for the Above Data, phrase the data in order like first question then first answer. Remove unwanted data and Highlight things with are in * ?", false, "pf13", oModel, true, true);
+                        this.onLLM(null, false, stringData, "for the Above Data, phrase the data in order like first question then first answer. Remove unwanted data but not question?", false, "pf13", oModel, true, true);
                     }
                     this.getView().byId("smartFormSearch").setVisible(false);
                     this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
@@ -1474,6 +1481,7 @@ sap.ui.controller("copilot.copilot", {
         var aDisplay = {};
         var aDisplayText = {};
         var that = this;
+        var oView = this.getView();
         oBusy = new sap.m.BusyDialog();
         oBusy.open();
         aDisplay.text = sValue;
