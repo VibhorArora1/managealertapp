@@ -398,7 +398,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
 								message: {
-									text: generatedValuesStr + " for the above question answer precisely?",
+									text: generatedValuesStr + " Answer the above question in detail with phrasing them in order of question and answer?",
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
@@ -422,10 +422,17 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								},
 								next: function (response) {
 									console.log("Received message:", response);
+									response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "<b>$1</b>");
+									response.result.message = response.result.message.replace(/\[\^\d+\^\]/g, "");
 									oResut.question = generatedValues;
 									oResut.answer = response.result.message;
 									aResult.push(oResut);
-									var JSONoModelBing = new sap.ui.model.json.JSONModel(aResult);
+									var oFeedDisplay = { FeedInput: [] };
+									var aDisplayText = {};
+									aDisplayText.text = response.result.message;
+									aDisplayText.sender = "Bot"
+									oFeedDisplay.FeedInput.push(aDisplayText);
+									var JSONoModelBing = new sap.ui.model.json.JSONModel(oFeedDisplay);
 									view.setModel(JSONoModelBing, "pf12");
 								},
 								error: (err) => {
@@ -461,7 +468,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					conversationId: response.conversationId,
 					participant: { id: response.participantId },
 					message: {
-						text: generatedValues + "Answer in less than 50 words and be precise",
+						text: generatedValues + "Answer the above question in detail with phrasing them in order of question and answer?",
 						author: "user",
 						inputMethod: "Keyboard",
 						requestId: guid,

@@ -231,18 +231,18 @@
 
  <l:VerticalLayout
     id="idVerticalLayoutBingSearch"
-		binding="{pf13>/}"
+		binding="{pf12>/}"
 		class="sapUiContentPadding"
 		visible="false"
     width="100%">
     
-		<ObjectIdentifier title="Retrieved Information" text="{pf13>Sanction}" titleActive="false"/>
+		<ObjectIdentifier title="Retrieved Information" text="{pf12>Sanction}" titleActive="false"/>
 	</l:VerticalLayout>
 
 
-<List id="_IDGenList3" showSeparators="Inner" items="{pf13>/FeedInput}" visible="false">
-                <FeedListItem id="_IDGenFeedListItem3" iconDensityAware="false" sender="{pf13>sender}" 
-      text="{pf13>text}"
+<List id="_IDGenList3" showSeparators="Inner" items="{pf12>/FeedInput}" visible="false">
+                <FeedListItem id="_IDGenFeedListItem3" iconDensityAware="false" sender="{pf12>sender}" 
+      text="{pf12>text}"
       convertLinksToAnchorTags="All" />
       </List>
   <smartForm:SmartForm id="smartFormColumn2"

@@ -1279,17 +1279,6 @@ sap.ui.controller("copilot.copilot", {
             if (this.getView().getModel("pf12")) {
                 var data = this.getView().getModel("pf12").getData();
                 if (data) {
-                    var oModel = new sap.ui.model.json.JSONModel();
-                    var modelLoad = this.getView().getModel("pf13");
-                    if (modelLoad) {
-                        if (modelLoad.getData()) {
-                            run = false;
-                        }
-                    }
-                    if (run) {
-                        stringData = JSON.stringify(data);
-                        this.onLLM(null, false, stringData, "for the Above Data, phrase the data in order like first question then first answer. Remove unwanted data but not question?", false, "pf13", oModel, true, true);
-                    }
                     this.getView().byId("smartFormSearch").setVisible(false);
                     this.getView().byId("idVerticalLayoutBingSearch").setVisible(true);
                     this.getView().byId("smartTable").setVisible(false);
@@ -1496,7 +1485,7 @@ sap.ui.controller("copilot.copilot", {
         if (oCommentModel) {
             if (oCommentModel.getData()) {
                 for (var i = 0; i < oCommentModel.getData().FeedInput.length; i++) {
-                    oFeedDisplay.FeedInput.push(oCommentModel.FeedInput[i]);
+                    oFeedDisplay.FeedInput.push(oCommentModel.getData().FeedInput[i]);
                 }
             }
         }
