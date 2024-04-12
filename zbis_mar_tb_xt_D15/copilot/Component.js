@@ -369,6 +369,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 			iterationChatHub: async function (generatedValues, that, response, guid, guid1, aResult, oResut) {
 				var i = 0; // Initialize index variable
 				var view = that.oView;
+				var oFeedDisplay = { FeedInput: [] };
+									var aDisplayText = {};
 				var chatHubCallback = async function () {
 					if (i < generatedValues.length) {
 						const connection = new signalR.HubConnectionBuilder()
@@ -416,7 +418,14 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								},
 								optionSets: ['stream_writes', 'flux_prompt_v1'],
 							};
+							
 
+							connection.on("Update", (response) => {
+								if (response.messages?.length) {
+									// console.log("Upd message:", response.messages[0]);
+									aDisplayText.text = response.messages[0].text
+								}
+							});
 							await connection.stream("Chat", initialMessage).subscribe({
 								complete: () => {
 
@@ -429,16 +438,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 								},
 								next: function (response) {
-									console.log("Received message:", response);
-									response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
+									aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
 									// response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "");
-									response.result.message = response.result.message.replace(/\[\^\d+\^\]/g, "");
-									oResut.question = generatedValues;
-									oResut.answer = response.result.message;
-									aResult.push(oResut);
-									var oFeedDisplay = { FeedInput: [] };
-									var aDisplayText = {};
-									aDisplayText.text = response.result.message;
+									aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");				
 									aDisplayText.sender = "Bot"
 									oFeedDisplay.FeedInput.push(aDisplayText);
 									var JSONoModelBing = new sap.ui.model.json.JSONModel(oFeedDisplay);
