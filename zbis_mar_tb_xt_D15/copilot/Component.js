@@ -387,7 +387,15 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							} else {
 								session = false;
 							}
-							var generatedValuesStr = JSON.stringify(generatedValues);
+							var generatedValuesStr;
+							// var generatedValuesStr = JSON.stringify(generatedValues);
+							for (var j = 0; j < generatedValues.length; j++) {
+								if (!generatedValuesStr) {
+									generatedValuesStr = generatedValues[j]
+								} else {
+									generatedValuesStr = generatedValuesStr + ", " + generatedValues[j]
+								}
+							}
 							const initialMessage = {
 								// source: "BingApiTest",
 								// allowedMessageTypes: DEFAULT_ALLOWED_MESSAGE_TYPES,
@@ -422,7 +430,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								},
 								next: function (response) {
 									console.log("Received message:", response);
-									response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "<b>$1</b>");
+									response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
+									// response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "");
 									response.result.message = response.result.message.replace(/\[\^\d+\^\]/g, "");
 									oResut.question = generatedValues;
 									oResut.answer = response.result.message;
