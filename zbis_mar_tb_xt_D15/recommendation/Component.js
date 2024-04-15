@@ -104,9 +104,9 @@ sap.ui.define(
             i2.ScreenedName = input[i].BP_FULL_NAME // Copy the ScreenedName from the input element
             i2.ScreenedAddress = input[i].SCREENEDADDRESS // Copy the ScreenedAddress from the input element
             i2.ScreenedCountry = input[i].BP_COUNTRY // Copy the ScreenedCity from the input element
-            AlertLC = input[i].ALERT_LC // Copy the AlertLC from the input element
-            disableCompleteItem = 'false'
-            isItemSelected = false
+            var AlertLC = input[i].ALERT_LC // Copy the AlertLC from the input element
+            var disableCompleteItem = 'false'
+            var isItemSelected = false
             output.result.push({
               Item: map[itemDBKey],
               i2: i2,

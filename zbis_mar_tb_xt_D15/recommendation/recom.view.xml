@@ -11,22 +11,24 @@
 			<content>
 			<FlexBox id="FlexBox" items="{M1>/result}" direction="Column">
 			<items>
-			<Table id="hitsTable" items="{M1>Item}" inset="false" alternateRowColors="false" 
-				growing="true" growingScrollToLoad="false" growingThreshold="15" selectionChange="onSelection"
-				noDataText="i18>NoAddrHits">
+			<Table id="hitsTable" inset="false" alternateRowColors="false"			
+			items="{path: 'M1>Item',sorter: [{ path: 'Status', descending: false}, {path: 'AI_close_reason', descending: true }], templateShareable:false}"
+			growing="true" growingScrollToLoad="false" growingThreshold="15" selectionChange="onSelection"
+			noDataText="{i18n>NoAddrHits}" includeItemInSelection="true"> 
 
 					<headerToolbar>
 						<OverflowToolbar id="_IDGenOverflowToolbar">
 							<Title id="hitsTableHeaderTitle" text="{path:'M1>i2/ScreenedName'},{path:'M1>i2/ScreenedAddress'},{path:'M1>i2/ScreenedCountry'}"/>
 							<ToolbarSpacer id="_IDGenToolbarSpacer"/>  
-							<Button id="SubAddrHits" text="Submit Address Hits" type="Emphasized" press="onSubmitHits" enabled="{=${M1>AlertLC} === '02'}"></Button>
-							<Button id="CompItm" text="Complete Item" type="Emphasized" press="onCompleteItem" enabled="{=${M1>AlertLC} === '02'}"></Button>
+							<Button id="SubAddrHits" text="Submit Address Hits" type="Emphasized" press="onSubmitHits" enabled="{=${M1>AlertLC} === '02' &amp;&amp; ${M1>isItemSelected} === true }"></Button>
+							<Button id="CompItm" text="Complete Item" type="Emphasized" press="onCompleteItem" enabled="{=${M1>AlertLC} === '02' &amp;&amp; ${M1>disableCompleteItem} === 'false'
+							        &amp;&amp; ${M1>isItemSelected} === true}"></Button>
 						</OverflowToolbar>
 					</headerToolbar>
 
 					<columns>
 						<Column id="Screeningselect">
-							<CheckBox id="Select-header" enabled="{=${M1>AlertLC} === '02'}"/>
+							<CheckBox id="Select-header" enabled="{=${M1>AlertLC} === '02'}" select="onHeaderCheckboxSelect" selected="{= ${M1>isItemSelected} === true}"/>
 						</Column>
 
 						<Column id="ScreeningNameColumn" vAlign="Middle">
@@ -71,19 +73,22 @@
 					</columns>
 
 					<items>
-						<ColumnListItem id="screeningHit-item">
+						<ColumnListItem id="screeningHit-item" type="Active">
 							<cells>
-							        <CheckBox id="Select-item" visible="{=${M1>AI_close_reason} === 'No-Hit'}" enabled="{=${M1>Alert_LC} === '02'}"/>
-								    <Text id="Name"  text="{M1>HitName}"/>
+									<CheckBox id="Select-item" select="onItemCheckboxSelect" visible="{= ${M1>isCheckBoxVisible} === 'true'}" enabled="{=${M1>Alert_LC} === '02'}" selected="{= ${M1>isSelected} === true}"/>
+								    <!-- <CheckBox id="Select-item" visible="{=${M1>isCheckBoxVisible} === 'true'}"/> -->
+									<Text id="Name"  text="{M1>HitName}"/>
                                     <Text id="Address"  text="{M1>HitAddress}" />
                                     <Text id="Country" text="{M1>HitCountryCode}" />
 									<Text id="MatchScr" text="{path:'M1>AI_match_score', formatter: '.toPercentage' }"/>
 									<Link id="EntityId" text="{M1>Entity_ID}" press="onLinkPress"/>
-									<Switch id="Decision" customTextOn="{i18n>DecisionTextYes}" customTextOff="{i18n>DecisionTextNo}" change="onDecisionChanged" enabled="{=${M1>Alert_LC} === '02'}"/>
+									<Switch id="Decision" customTextOn="{i18n>DecisionTextYes}" customTextOff="{i18n>DecisionTextNo}" change="onDecisionChanged" 
+									        enabled="{=${M1>Alert_LC} === '02' &amp;&amp; ${M1>Status} === 'Open' &amp;&amp; ${M1>AI_close_reason} === 'No-Hit'}" state="{M1>Hit}"/>
 									<Text id="Status" text="{M1>Status} "/>
 									<Text id="ClsReason" text="{M1>AI_close_reason}"/>
 									<Button id="Dislike" icon="sap-icon://thumb-down" press="onDislikePress" enabled="{=${M1>Alert_LC} === '02'}"/>
-                                    <TextArea id="Remark" maxLength="1000" growing="true"	rows="1" width="100%" growingMaxLines="10" value="{M1>AI_Recommendation}" enabled="{=${M1>Alert_LC} === '02'}"/>
+                                    <TextArea id="Remark" maxLength="1000" growing="true"	rows="1" width="100%" growingMaxLines="10" value="{M1>AI_Recommendation}" 
+									          editable="{=${M1>Alert_LC} === '02' &amp;&amp; ${M1>Status} === 'Open' &amp;&amp; ${M1>AI_close_reason} === 'No-Hit'}"/>
 							</cells>
 						</ColumnListItem>
 			        </items>
