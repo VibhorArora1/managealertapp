@@ -48,8 +48,24 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 					//Grab an instance of the view, and set data retrieved to its default model.
 					var view = this.oView;
-					this.oBusy = new sap.m.BusyDialog();
-					this.oBusy.open();
+					// this.oBusy = new sap.m.BusyDialog();
+					// this.oBusy.open();
+					oTable1 = view.byId("tblOrgAddress");
+					oTable2 = view.byId("tblPersonAddress");
+					oTable3 = view.byId("tblBPOtherInfoV2");
+					oTable4 = view.byId("tblBPOtherInfoExpiredV2");
+					if (oTable1) {
+						oTable1.setBusy(true);
+					}
+					if (oTable2) {
+						oTable2.setBusy(true);
+					}
+					if (oTable3) {
+						oTable3.setBusy(true);
+					}
+					if (oTable4) {
+						oTable4.setBusy(true);
+					}
 					var that = this;
 					objDefaultModel.read(strServicePath, {
 						urlParameters: {
@@ -58,7 +74,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						success: function (data) {
 							//Instantiate a JSON model with return data from oData Service. We will bind this as default model.
 							var dataModel = new sap.ui.model.json.JSONModel(data);
-							
+
 							//Use a custom sorter to build the display order based on:
 							// Items having the same Request ID should be grouped together - but Org should come first.
 
@@ -84,7 +100,20 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 							//Set the view model.
 							view.setModel(dataModel);
-							that.oBusy.close();
+							// that.oBusy.close();
+							if (oTable1) {
+								oTable1.setBusy(false);
+							}
+							if (oTable2) {
+								oTable2.setBusy(false);
+							}
+							if (oTable3) {
+								oTable3.setBusy(false);
+							}
+							if (oTable4) {
+								oTable4.setBusy(false);
+							}
+
 							dataModel.refresh();
 
 						}
