@@ -85,6 +85,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							view.byId("_IDGenList1").setVisible(false);
 							view.byId("_IDGenFeedInput2").setVisible(false);
 							view.byId("_IDGenList2").setVisible(false);
+							view.byId("_IDGenList3").setVisible(false);
 							view.byId("sanctionTabVerticalID").setVisible(false);
 							view.byId("smartFormSearch").setVisible(false);
 							view.byId("idVerticalLayoutBingSearch").setVisible(false);
@@ -408,7 +409,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
 								message: {
-									text: generatedValuesStr + " Answer the above question in detail with phrasing them in order of question and answer?",
+									text: generatedValuesStr + " Answer the above question in detail with phrasing them in order of question and answer? and Result should be english Language",
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
