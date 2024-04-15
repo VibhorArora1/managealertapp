@@ -203,18 +203,21 @@ sap.ui.controller('recommendation.recom', {
     this.openCompleteDialog(openItem, finalData, oModel, oSelectionPath,selectedItems)
   },
   onLinkPress: function (oEvent) {
-    var oLink = oEvent.getSource()
-    var sLinkID = oLink.getText() // Get the link ID value
-    var oCrossAppNav = sap.ushell.Container.getService(
-      'CrossApplicationNavigation'
-    )
-    oCrossAppNav.toExternal({
+  
+    var oSelectionPath = oEvent.getSource().getBindingContext('M1').getPath();
+    var oModel = this.getView().getModel('M1');
+    var oData = oModel.getProperty(oSelectionPath);
+    var sEntityDBKey = oData.EntityDBKey;
+
+    var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
+
+    oCrossAppNav.hrefForExternal({
       target: {
-        semanticObject: 'AddressScreeningList', // Replace with your target app's semantic object
-        action: 'manage' // Replace with your target app's action
+        semanticObject: "AddressScreeningList", // Replace with your target app's semantic object
+        action: "manage" // Replace with your target app's action
       },
       params: {
-        EntityDBKey: '000D3A0659881EEA9AC2D9EE9478683D' // Pass the link ID as a parameter
+        EntityDBKey: sEntityDBKey // Pass the link ID as a parameter
       }
     })
   },
