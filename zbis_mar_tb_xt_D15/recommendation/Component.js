@@ -104,14 +104,21 @@ sap.ui.define(
             i2.ScreenedName = input[i].BP_FULL_NAME // Copy the ScreenedName from the input element
             i2.ScreenedAddress = input[i].SCREENEDADDRESS // Copy the ScreenedAddress from the input element
             i2.ScreenedCountry = input[i].BP_COUNTRY // Copy the ScreenedCity from the input element
-//            AlertLC = input[i].ALERT_LC // Copy the AlertLC from the input element
-            output.result.push({ Item: map[itemDBKey], i2: i2 }) // Push an object with Item and i2 properties to the output result array
+            AlertLC = input[i].ALERT_LC // Copy the AlertLC from the input element
+            disableCompleteItem = 'false'
+            isItemSelected = false
+            output.result.push({
+              Item: map[itemDBKey],
+              i2: i2,
+              AlertLC: AlertLC,
+              disableCompleteItem: disableCompleteItem,
+              isItemSelected: isItemSelected
+            }) // Push an object with Item and i2 properties to the output result array
           }
           var item = {} // Initialize an empty object for the item
           item.DBkey = input[i].DBKEY    // Copy the DBkey from the input element
           item.ItemDBkey = input[i].ITEMDBKEY    // Copy the ItemDbkey from the input element
           item.AddressDBkey = input[i].ADDRESSDBKEY    // Copy the Address_ID from the input element
-          // item.AddressDBkey = input[i].ADDRESS_ID    // Copy the Address_ID from the input element
           item.HitName = input[i].HIT_NAME // Copy the HitName from the input element
           item.HitCountryCode = input[i].HIT_COUNTRY // Copy the HitCountryCode from the input element
           item.HitAddress = input[i].HIT_ADDRESS // Copy the HitAddress from the input element
@@ -121,7 +128,26 @@ sap.ui.define(
           item.AI_Recommendation = input[i].AI_RECOMMENDATION // Copy the AI_Recommendation from the input element
           item.Status = input[i].STATUS // Copy the Status from the input element
           item.Entity_ID = input[i].ENTITY_ID // Copy the Entity_ID from the input element
+          item.Alert_LC = input[i].ALERT_LC // Copy the AlertLC from the input element
+          item.isSelected = false;
           map[itemDBKey].push(item) // Push the item to the corresponding array in the map object
+
+          if (item.AI_close_reason == 'No-Hit' && item.Status == 'Open') {
+            item.isCheckBoxVisible = 'true'
+          } else {
+            item.isCheckBoxVisible = 'false'
+          }
+      
+          if (item.AI_close_reason != 'No-Hit') {
+            output.result[output.result.length - 1].disableCompleteItem = 'true'
+          }
+      
+          if (input[i].CONFSTATUS === 'YES') {
+            item.Hit = true; }
+          else if(input[i].CONFSTATUS === 'NO') 
+          {
+            item.Hit = false; 
+          }
         }
 
         //Instantiate a JSON model with return data from oData Service. We will bind this as default model.

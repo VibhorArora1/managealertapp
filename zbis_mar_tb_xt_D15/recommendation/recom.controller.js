@@ -4,16 +4,7 @@ sap.ui.controller('recommendation.recom', {
    * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
    * @memberOf alertinfo.Alert_Info
    */
-  onInit: function () {
-    //var oUser = sap.ushell.Container.getUser()
-    //var sUserId = oUser.getId()
-    // if (sUserId === "VIBHORARORA" || sUserId === "SNEHAP" || sUserId === "ANANDRAI" || sUserId === "RUMACPAR") {
-    // 	this.getView().byId("_IDGenButton1").setVisible(true);
-    // } else {
-    // 	this.getView().byId("_IDGenButton1").setVisible(false);
-
-    // }
-  },
+  onInit: function () {},
 
   // formatter
   columnTextWithLineBreak: function (sText1, sText2) {
@@ -60,26 +51,27 @@ sap.ui.controller('recommendation.recom', {
    * @memberOf alertinfo.Alert_Info
    */
   onSubmitHits: function (oEvent) {
-    // Get the selected paths
-    var oSelectionPath = oEvent.oSource.oParent.oParent._aSelectedPaths // Get selected paths
-    //        var view = this.getView() // Assuming you have a reference to the view
-    var oModel = this.getView().getModel('M1') // Assuming your model name is "data"
+    var oSelectionPath = oEvent.getSource().getBindingContext('M1').getPath()
+    var num = oSelectionPath.substring(8)
+    var oModel = this.getView().getModel('M1')
+    var oData = oModel.getData()
+    var selectedItems = oData.result[num].Item
 
     // Initialize an array to store the selected data
     var selectedData = []
-    // Loop through each selected path and retrieve the corresponding data
-    oSelectionPath.forEach(function (path) {
-      var selectedItem = oModel.getProperty(path)
-      // Select specific fields and create a new object
-      var selectedFields = {
-        AlertKey: selectedItem.DBkey,
-        ItemKey: selectedItem.ItemDBkey,
-        AddressKey: selectedItem.AddressDBkey,
-        AIRecomm: selectedItem.AI_Recommendation
-      }
-      selectedData.push(selectedFields) // Push the selected fields to the array
-    })
 
+    selectedItems.forEach(function (Item) {
+      if (Item.isSelected === true) {
+        // Select specific fields and create a new object
+        var selectedFields = {
+          AlertKey: Item.DBkey,
+          ItemKey: Item.ItemDBkey,
+          AddressKey: Item.AddressDBkey,
+          AIRecomm: Item.AI_Recommendation
+        }
+        selectedData.push(selectedFields) // Push the selected fields to the array
+      }
+    })
     // Create the final JSON format
     var finalJSON = {
       AlertKey: selectedData[0].AlertKey, // Map the first AlertKey from selectedData
@@ -89,16 +81,16 @@ sap.ui.controller('recommendation.recom', {
           ItemKey: item.ItemKey,
           AddressKey: item.AddressKey,
           AIRecomm: item.AIRecomm,
-          Status: ' '
+          Status: ' ',
+          ConfStatus: ' '
         }
       })
     }
-
     // Call the OData service to submit the data
 
     var strURL = '/sap/opu/odata/sap/ZBIS_REL_ADDR_HITS_AI_RECOMM_SRV/' //Set up base call URL
 
-    var objModel = new sap.ui.model.odata.v2.ODataModel(strURL, {
+    var objModel = new ODataModel(strURL, {
       json: true,
       useBatch: false
     })
@@ -107,7 +99,6 @@ sap.ui.controller('recommendation.recom', {
       // Assuming the entity set is ZBIS_C_ALERT_HIT_DET
       success: function (data) {
         // Handle the success response
-        debugger
 
         var addHitsResult = data.Nav_To_Item.results
         var oModelData = oModel.getData()
@@ -138,18 +129,16 @@ sap.ui.controller('recommendation.recom', {
             })
           }
         })
-
         // Refresh the model to reflect the changes
         oModel.refresh(true)
       },
       error: function (error) {
         // Handle the error response
-        debugger
       }
     })
   },
 
-  completeItem: function (finalJSON, oModel, oSelectionPath) {
+  completeItem: function (finalJSON, oModel, oSelectionPath,selectedItems) {
     // Call the OData service to submit the data
 
     var strURL = '/sap/opu/odata/sap/ZBIS_REL_ADDR_HITS_AI_RECOMM_SRV/' //Set up base call URL
@@ -167,22 +156,20 @@ sap.ui.controller('recommendation.recom', {
         var itemResult = JSON.parse(data.Response)
 
         if (itemResult.type == 'E') {
-          new sap.m.MessageBox.error(itemResult.message);
+          new sap.m.MessageBox.error(itemResult.message)
         } else if (itemResult.type == 'S') {
-          sap.m.MessageToast.show(itemResult.message);
+          sap.m.MessageToast.show(itemResult.message)
         } else if (itemResult.type == 'W') {
-          sap.m.MessageBox.warning(itemResult.message);
+          sap.m.MessageBox.warning(itemResult.message)
         }
         // Update Address Hits Status
-        // var oModelData = oModel.getData()
-
-        // Loop through each entry in addHits
-        oSelectionPath.forEach(function (path) {
-          var selectedItem = oModel.getProperty(path)
-          selectedItem.Status = 'Submitted'
+        selectedItems.forEach(function (Item) {
+          if (Item.Status == 'Open') {
+            Item.Status = 'Submitted';
+          }
         })
         // Refresh the model to reflect the changes
-        oModel.refresh(true);
+        oModel.refresh(true)
       },
       error: function (error) {
         // Handle the error response
@@ -191,87 +178,141 @@ sap.ui.controller('recommendation.recom', {
   },
 
   onCompleteItem: function (oEvent) {
-    var oSelectionPath = oEvent.oSource.oParent.oParent._aSelectedPaths // Get selected paths
+    var oSelectionPath = oEvent.getSource().getBindingContext('M1').getPath()
+    var num = oSelectionPath.substring(8)
     var oModel = this.getView().getModel('M1')
+    var oData = oModel.getData()
+    var selectedItems = oData.result[num].Item
+    var selectedItem = oData.result[num].Item[0]
 
-    const finalData = oSelectionPath.map(path => {
-      const selectedItem = oModel.getProperty(path)
-      return {
-        AlertKey: selectedItem.DBkey,
-        ItemKey: selectedItem.ItemDBkey,
-        Response: ' '
+    const finalData = {
+      AlertKey: selectedItem.DBkey,
+      ItemKey: selectedItem.ItemDBkey,
+      SummText: ' ',
+      Response: ' '
+    }
+
+    // var that = this;
+    var openItem = false
+
+    selectedItems.forEach(function (Item) {
+      if (Item.Status == 'Open') {
+        openItem = true
+      }
+    })
+    this.openCompleteDialog(openItem, finalData, oModel, oSelectionPath,selectedItems)
+  },
+  onLinkPress: function (oEvent) {
+    var oLink = oEvent.getSource()
+    var sLinkID = oLink.getText() // Get the link ID value
+    var oCrossAppNav = sap.ushell.Container.getService(
+      'CrossApplicationNavigation'
+    )
+    oCrossAppNav.toExternal({
+      target: {
+        semanticObject: 'AddressScreeningList', // Replace with your target app's semantic object
+        action: 'manage' // Replace with your target app's action
+      },
+      params: {
+        EntityDBKey: '000D3A0659881EEA9AC2D9EE9478683D' // Pass the link ID as a parameter
+      }
+    })
+  },
+  // Header Checkbox Select
+  onHeaderCheckboxSelect: function (oEvent) {
+    debugger
+    var bSelected = oEvent.getParameter('selected')
+    var oSelectionPath = oEvent.getSource().getBindingContext('M1').getPath()
+    var itemPath = oSelectionPath + '/Item'
+    var num = oSelectionPath.substring(8)
+    var oModel = this.getView().getModel('M1')
+    var oData = oModel.getData()
+    var selectedItems = oData.result[num].Item
+
+    oData.result[num].isItemSelected = bSelected //Enable buttons if checkbox selected
+    selectedItems.forEach(function (path) {
+      if (path.isCheckBoxVisible === 'true') {
+        path.isSelected = bSelected
+      }
+    })
+    oModel.setProperty(itemPath, selectedItems)
+  },
+
+  // Item Checkbox Select
+  onItemCheckboxSelect: function (oEvent) {
+    debugger
+    var bSelected = oEvent.getParameter('selected')
+    var oSelectionPath = oEvent.getSource().getBindingContext('M1').getPath()
+    var oModel = this.getView().getModel('M1') // Assuming your model name is "data"
+    var odata = oModel.getProperty(oSelectionPath)
+    odata.isSelected = bSelected
+    var oHeaderPath = oSelectionPath.substring(
+      0,
+      oSelectionPath.indexOf('/Item')
+    )
+    var oHeaderData = oModel.getProperty(oHeaderPath)
+    oHeaderData.isItemSelected = bSelected // Set header as selected if Item selected
+    oModel.setProperty(oHeaderPath, oHeaderData)
+    oModel.setProperty(oSelectionPath, odata)
+  },
+  // Function to open the dialog
+  openCompleteDialog: function (openItem, finalData, oModel, oSelectionPath,selectedItems) {
+  
+    // Create a message strip
+    var oMessageStrip = new sap.m.MessageStrip({
+      text: '{i18n>DecisionWarning}',
+      type: 'Warning',
+      showIcon: true,
+      visible: openItem,
+      enableFormattedText: true
+    })
+
+    // Create a text input field
+    var oInput = new sap.m.TextArea({
+      placeholder: 'Enter Summary...',
+      width: '400px',
+      height: '200px',
+      id: 'summaryField',
+      maxLength: 16000
+    })
+
+    // Create a dialog
+    var oDialog = new sap.m.Dialog({
+      title: 'Complete Item',
+      content: [oMessageStrip, oInput],
+      beginButton: new sap.m.Button({
+        text: 'Save',
+        press: function () {
+          // Logic to handle the submission
+          // var summary = sap.ui.getCore().byId("summaryField").getValue();
+          var oTextArea = sap.ui.getCore().byId('summaryField')
+          var sValue = oTextArea.getValue()
+
+          if (!sValue) {
+            // TextArea is empty, show an error message and prevent form submission
+            oTextArea.setValueState(sap.ui.core.ValueState.Error)
+            oTextArea.setValueStateText('Please enter a summary') // Custom error message
+          } else {
+            // TextArea is filled, proceed with form submission
+            oTextArea.setValueState(sap.ui.core.ValueState.None)
+            oDialog.close()
+            finalData.SummText = sValue;
+            completeItem(finalData, oModel, oSelectionPath,selectedItems)
+          }
+        }
+      }),
+      endButton: new sap.m.Button({
+        text: 'Cancel',
+        press: function () {
+          oDialog.close()
+        }
+      }),
+      afterClose: function () {
+        oDialog.destroy()
       }
     })
 
-    var that = this;
-    var finalJSON = finalData[0]
-    var isMessageBoxCalled = false // Flag variable
-
-
-// Check if any of the selected items have a status of 'Open'
-oSelectionPath.forEach(function (path) {
-
-  var selectedItem = oModel.getProperty(path);
-
-  if (selectedItem.Status == 'Open') {
-    var openItem = true;
-  }
-});
-
-if (!openItem) {  // Complete Item
-  that.completeItem(finalJSON, oModel, oSelectionPath);
-}
-else
-{
-  sap.m.MessageBox.warning(
-    'There are open address screening hits for your alerts. Clicking on OK will submit them.',
-    {
-      actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
-      //  emphasizedAction: MessageBox.Action.OK,
-      onClose: function (sAction) {
-        if (sAction === sap.m.MessageBox.Action.OK) {
-          // Complete Item
-          that.completeItem(finalJSON, oModel, oSelectionPath);
-        } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
-          return;
-        }
-      }.bind(this)
-    }
-  )
-
-}
-
-//    Check if any of the selected items have a status of 'Open'
-    // oSelectionPath.forEach(function (path) {
-    //   if (isMessageBoxCalled) {
-    //     return // Exit the forEach loop if MessageBox is already called
-    //   }
-
-    //   var selectedItem = oModel.getProperty(path)
-
-    //   if (selectedItem.Status == 'Open') {
-    //     sap.m.MessageBox.warning(
-    //       'There are open address screening hits for your alerts. Clicking on OK will submit them.',
-    //       {
-    //         actions: [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
-    //         //  emphasizedAction: MessageBox.Action.OK,
-    //         onClose: function (sAction) {
-    //           if (sAction === sap.m.MessageBox.Action.OK) {
-    //             // Complete Item
-    //             that.completeItem(finalJSON, oModel, oSelectionPath);
-    //           } else if (sButton === sap.m.MessageBox.Action.CANCEL) {
-    //             return;
-    //           }
-    //         }.bind(this)
-    //       }
-    //     )
-    //     isMessageBoxCalled = true // Set the flag variable to true
-    //   }
-    //   else {
-    //     // Complete Item
-    //     that.completeItem(finalJSON, oModel, oSelectionPath);
-    //   }
-    // })
+    // Open the dialog
+    oDialog.open()
   }
 })
-
