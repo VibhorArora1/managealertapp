@@ -8,7 +8,12 @@ sap.ui.controller("copilot.copilot", {
     onInit: function () {
 
         var oTable = this.getView().byId("OwnershipTableId");
-
+        if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
+            var oUserInfo = sap.ushell.Container.getService("UserInfo");
+            this.getOwnerComponent()._UserName = oUserInfo.getUser().getFirstName();
+        }else{
+            this.getOwnerComponent()._UserName = "User";
+        }
 
 
         oTable.attachUpdateFinished(function (oEvent) {
@@ -1396,7 +1401,7 @@ sap.ui.controller("copilot.copilot", {
         ];
         if (!sData) {
             aDisplay.text = oEvent.getParameter("value");
-            aDisplay.sender = "User";
+            aDisplay.sender = this.getOwnerComponent()._UserName;
             this.getOwnerComponent()._number = this.getOwnerComponent()._number + 1
             aDisplay.Number = this.getOwnerComponent()._number;
             oFeedDisplay.FeedInput.push(aDisplay);
@@ -1476,7 +1481,7 @@ sap.ui.controller("copilot.copilot", {
         oBusy = new sap.m.BusyDialog();
         oBusy.open();
         aDisplay.text = sValue;
-        aDisplay.sender = "User";
+        aDisplay.sender = this.getOwnerComponent()._UserName;
         this.getOwnerComponent()._bingNumber = this.getOwnerComponent()._bingNumber + 1
         aDisplay.Number = this.getOwnerComponent()._bingNumber;
         oFeedDisplay.FeedInput.push(aDisplay);
