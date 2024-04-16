@@ -130,6 +130,7 @@ sap.ui.define(
           item.Entity_ID = input[i].ENTITY_ID // Copy the Entity_ID from the input element
           item.Alert_LC = input[i].ALERT_LC // Copy the AlertLC from the input element
           item.isSelected = false;
+          item.EntityDBKey = input[i].ENTITYDBKEY; // Copy the EntityDBKey from the input element
           map[itemDBKey].push(item) // Push the item to the corresponding array in the map object
 
           if (item.AI_close_reason == 'No-Hit' && item.Status == 'Open') {
