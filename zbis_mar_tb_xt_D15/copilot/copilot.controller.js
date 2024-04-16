@@ -1482,7 +1482,12 @@ sap.ui.controller("copilot.copilot", {
         oBusy.open();
         aDisplay.text = sValue;
         aDisplay.sender = this.getOwnerComponent()._UserName;
-        this.getOwnerComponent()._bingNumber = this.getOwnerComponent()._bingNumber + 1
+
+        if(!this.getOwnerComponent()._bingNumber){
+            this.getOwnerComponent()._bingNumber = "1"
+        }else{
+            this.getOwnerComponent()._bingNumber = this.getOwnerComponent()._bingNumber + 1;
+        }
         aDisplay.Number = this.getOwnerComponent()._bingNumber;
         oFeedDisplay.FeedInput.push(aDisplay);
 
@@ -1538,6 +1543,12 @@ sap.ui.controller("copilot.copilot", {
                 connection.on("send", initialMessage => {
                     console.log(initialMessage);
                 });
+                connection.on("Update", (response) => {
+                    if (response.messages?.length) {
+                        // console.log("Upd message:", response.messages[0]);
+                        aDisplayText.text = response.messages[0].text
+                    }
+                });
 
                 connection.start().then(function () {
                     console.log("Connected!");
@@ -1548,7 +1559,6 @@ sap.ui.controller("copilot.copilot", {
                         },
                         next: function (response) {
 
-                            aDisplayText.text = response.result.message;;
                             aDisplayText.sender = "Bing"
                             that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
