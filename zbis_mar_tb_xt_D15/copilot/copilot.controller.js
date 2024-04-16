@@ -1559,6 +1559,8 @@ sap.ui.controller("copilot.copilot", {
                         },
                         next: function (response) {
 
+                            aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
+							aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
                             aDisplayText.sender = "Bing"
                             that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
