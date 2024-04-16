@@ -50,10 +50,10 @@ sap.ui.define(["sap/ui/core/UIComponent",
 					var view = this.oView;
 					// this.oBusy = new sap.m.BusyDialog();
 					// this.oBusy.open();
-					oTable1 = view.byId("tblOrgAddress");
-					oTable2 = view.byId("tblPersonAddress");
-					oTable3 = view.byId("tblBPOtherInfoV2");
-					oTable4 = view.byId("tblBPOtherInfoExpiredV2");
+					var oTable1 = view.byId("tblOrgAddress");
+					var oTable2 = view.byId("tblPersonAddress");
+					var oTable3 = view.byId("tblBPOtherInfoV2");
+					var oTable4 = view.byId("tblBPOtherInfoExpiredV2");
 					if (oTable1) {
 						oTable1.setBusy(true);
 					}
