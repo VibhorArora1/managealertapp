@@ -14,7 +14,9 @@
 			<Table id="hitsTable" inset="false" alternateRowColors="false"			
 			items="{path: 'M1>Item',sorter: [{ path: 'Status', descending: false}, {path: 'AI_close_reason', descending: true }], templateShareable:false}"
 			growing="true" growingScrollToLoad="false" growingThreshold="15" selectionChange="onSelection"
-			noDataText="{i18n>NoAddrHits}" includeItemInSelection="true"> 
+			noDataText="{i18n>NoAddrHits}" sticky="HeaderToolbar,ColumnHeaders" includeItemInSelection="true"
+			busyIndicatorDelay="0"
+		    enableBusyIndicator="false">  
 
 					<headerToolbar>
 						<OverflowToolbar id="_IDGenOverflowToolbar">

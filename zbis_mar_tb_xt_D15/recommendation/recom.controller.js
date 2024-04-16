@@ -192,7 +192,7 @@ sap.ui.controller('recommendation.recom', {
       Response: ' '
     }
 
-    // var that = this;
+    var that = this;
     var openItem = false
 
     selectedItems.forEach(function (Item) {
@@ -200,7 +200,7 @@ sap.ui.controller('recommendation.recom', {
         openItem = true
       }
     })
-    this.openCompleteDialog(openItem, finalData, oModel, oSelectionPath,selectedItems)
+    this.openCompleteDialog(openItem, finalData, oModel, oSelectionPath,selectedItems,that)
   },
   onLinkPress: function (oEvent) {
   
@@ -263,7 +263,7 @@ sap.ui.controller('recommendation.recom', {
     oModel.setProperty(oSelectionPath, odata)
   },
   // Function to open the dialog
-  openCompleteDialog: function (openItem, finalData, oModel, oSelectionPath,selectedItems) {
+  openCompleteDialog: function (openItem, finalData, oModel, oSelectionPath,selectedItems,that) {
   
     // Create a message strip
     var oMessageStrip = new sap.m.MessageStrip({
@@ -304,7 +304,7 @@ sap.ui.controller('recommendation.recom', {
             oTextArea.setValueState(sap.ui.core.ValueState.None)
             oDialog.close()
             finalData.SummText = sValue;
-            completeItem(finalData, oModel, oSelectionPath,selectedItems)
+            that.completeItem(finalData, oModel, oSelectionPath,selectedItems)
           }
         }
       }),
