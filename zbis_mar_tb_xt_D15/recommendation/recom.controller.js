@@ -211,7 +211,8 @@ sap.ui.controller('recommendation.recom', {
 
     var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
 
-    oCrossAppNav.hrefForExternal({
+    // Generate the hash
+    var sHash = oCrossAppNav.hrefForExternal({
       target: {
         semanticObject: "AddressScreeningList", // Replace with your target app's semantic object
         action: "manage" // Replace with your target app's action
@@ -220,6 +221,9 @@ sap.ui.controller('recommendation.recom', {
         EntityDBKey: sEntityDBKey // Pass the link ID as a parameter
       }
     })
+    // Open the URL in a new tab
+    window.open(sHash, '_blank');
+    // oCrossAppNav.toExternal({ target: { shellHash: sHash }, newWindow: true });  
   },
   // Header Checkbox Select
   onHeaderCheckboxSelect: function (oEvent) {

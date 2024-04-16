@@ -80,7 +80,7 @@
 									<Text id="Name"  text="{M1>HitName}"/>
                                     <Text id="Address"  text="{M1>HitAddress}" />
                                     <Text id="Country" text="{M1>HitCountryCode}" />
-									<Text id="MatchScr" text="{path:'M1>OverallScore', formatter: '.toPercentage' }"/>
+									<Text id="MatchScr" text="{path:'M1>OverallMatch', formatter: '.toPercentage' }"/>
 									<Link id="EntityId" text="{M1>Entity_ID}" press="onLinkPress"/>
 									<Switch id="Decision" customTextOn="{i18n>DecisionTextYes}" customTextOff="{i18n>DecisionTextNo}" change="onDecisionChanged" 
 									        enabled="{=${M1>Alert_LC} === '02' &amp;&amp; ${M1>Status} === 'Open' &amp;&amp; ${M1>AI_close_reason} === 'No-Hit'}" state="{M1>Hit}"/>
