@@ -1478,11 +1478,6 @@ sap.ui.controller("copilot.copilot", {
         var aDisplayText = {};
         var that = this;
         var oView = this.getView();
-        oBusy = new sap.m.BusyDialog();
-        oBusy.open();
-        aDisplay.text = sValue;
-        aDisplay.sender = this.getOwnerComponent()._UserName;
-
         if (!this.getOwnerComponent()._bingNumber) {
             this.getOwnerComponent()._bingNumber = "1"
         } else {
@@ -1490,6 +1485,12 @@ sap.ui.controller("copilot.copilot", {
         }
         aDisplay.Number = this.getOwnerComponent()._bingNumber;
         oFeedDisplay.FeedInput.push(aDisplay);
+        oBusy = new sap.m.BusyDialog();
+        oBusy.open();
+        aDisplay.text = sValue;
+        aDisplay.sender = this.getOwnerComponent()._UserName;
+
+       
 
         oCommentModel = this.getView().getModel("pf14");
         if (oCommentModel) {
@@ -1540,15 +1541,16 @@ sap.ui.controller("copilot.copilot", {
                     },
                     optionSets: ['stream_writes', 'flux_prompt_v1'],
                 };
-                connection.on("send", initialMessage => {
-                    console.log(initialMessage);
-                });
                 connection.on("Update", (response) => {
                     if (response.messages?.length) {
                         // console.log("Upd message:", response.messages[0]);
                         aDisplayText.text = response.messages[0].text
                     }
                 });
+                connection.on("send", initialMessage => {
+                    console.log(initialMessage);
+                });
+                
 
                 connection.start().then(function () {
                     console.log("Connected!");
@@ -1558,11 +1560,10 @@ sap.ui.controller("copilot.copilot", {
                             oBusy.close();
                         },
                         next: function (response) {
-
-                            aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
-                            aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
-                            aDisplayText.sender = "Bing"
                             that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
+                            aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");                           
+                            aDisplayText.sender = "Bing"
+                            aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
                             aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
                             oFeedDisplay.FeedInput.push(aDisplayText);
