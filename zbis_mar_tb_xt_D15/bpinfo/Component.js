@@ -48,8 +48,6 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 					//Grab an instance of the view, and set data retrieved to its default model.
 					var view = this.oView;
-					// this.oBusy = new sap.m.BusyDialog();
-					// this.oBusy.open();
 					var oTable1 = view.byId("tblOrgAddress");
 					var oTable2 = view.byId("tblPersonAddress");
 					var oTable3 = view.byId("tblBPOtherInfoV2");
