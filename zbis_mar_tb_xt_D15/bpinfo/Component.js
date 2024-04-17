@@ -48,10 +48,10 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 					//Grab an instance of the view, and set data retrieved to its default model.
 					var view = this.oView;
-					var oTable1 = view.byId("tblOrgAddress");
-					var oTable2 = view.byId("tblPersonAddress");
-					var oTable3 = view.byId("tblBPOtherInfoV2");
-					var oTable4 = view.byId("tblBPOtherInfoExpiredV2");
+					var oTable4 = view.byId("tblOrgAddress");
+					var oTable3 = view.byId("tblPersonAddress");
+					var oTable2 = view.byId("tblBPOtherInfoV2");
+					var oTable1 = view.byId("tblBPOtherInfoExpiredV2");
 					if (oTable1) {
 						oTable1.setBusy(true);
 					}

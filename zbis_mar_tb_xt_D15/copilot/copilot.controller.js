@@ -11,7 +11,7 @@ sap.ui.controller("copilot.copilot", {
         if (sap.ushell && sap.ushell.Container && sap.ushell.Container.getService) {
             var oUserInfo = sap.ushell.Container.getService("UserInfo");
             this.getOwnerComponent()._UserName = oUserInfo.getUser().getFirstName();
-        }else{
+        } else {
             this.getOwnerComponent()._UserName = "User";
         }
 
@@ -1010,35 +1010,34 @@ sap.ui.controller("copilot.copilot", {
                                     }
                                     that.getOwnerComponent._directSanctionStringData = JSON.stringify(directSanctionData.data);
                                 }
-                                for (var j = 0; j < data.Data[0].CONTROLLING_SHAREHOLDERS.length; j++) {
-                                    if (directSanctionData.data.nodes[i].bvdId === data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_BVD_ID_NUMBER) {
-                                        if (directSanctionData.data.nodes[i].sanctionsByExt.length > 0) {
-                                            for (var k = 0; k < directSanctionData.data.nodes[i].sanctionsByExt.length; k++) {
-                                                if (!data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction) {
-                                                    data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction = directSanctionData.data.nodes[i].sanctionsByExt[k].list + " with " + that.getNumberValueForPercentage(directSanctionData.data.nodes[i].sanctionsByExt[k].percentage) + "%";
-                                                } else {
-                                                    data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction = data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction + ", " + directSanctionData.data.nodes[i].sanctionsByExt[k].list + " with " + that.getNumberValueForPercentage(directSanctionData.data.nodes[i].sanctionsByExt[k].percentage) + "%";
+                                if (run) {
+                                    for (var j = 0; j < data.Data[0].CONTROLLING_SHAREHOLDERS.length; j++) {
+                                        if (directSanctionData.data.nodes[i].bvdId === data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_BVD_ID_NUMBER) {
+                                            if (directSanctionData.data.nodes[i].sanctionsByExt.length > 0) {
+                                                for (var k = 0; k < directSanctionData.data.nodes[i].sanctionsByExt.length; k++) {
+                                                    if (!data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction) {
+                                                        data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction = directSanctionData.data.nodes[i].sanctionsByExt[k].list + " with " + that.getNumberValueForPercentage(directSanctionData.data.nodes[i].sanctionsByExt[k].percentage) + "%";
+                                                    } else {
+                                                        data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction = data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction + ", " + directSanctionData.data.nodes[i].sanctionsByExt[k].list + " with " + that.getNumberValueForPercentage(directSanctionData.data.nodes[i].sanctionsByExt[k].percentage) + "%";
+                                                    }
                                                 }
+                                            } else {
+                                                data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction = "No Sanction Found";
                                             }
-                                        } else {
-                                            data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_Sanction = "No Sanction Found";
-                                        }
 
-                                        if (directSanctionData.data.nodes[i].sanctions.length > 0) {
-                                            for (var k = 0; k < directSanctionData.data.nodes[i].sanctions.length; k++) {
-                                                if (!data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate) {
-                                                    data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate = directSanctionData.data.nodes[i].sanctions[k].list + " and " + that.formatDate(directSanctionData.data.nodes[i].sanctions[k].since);
-                                                } else {
-                                                    data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate = data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate + ", " + directSanctionData.data.nodes[i].sanctions[k].list + " and " + that.formatDate(directSanctionData.data.nodes[i].sanctions[k].since);
+                                            if (directSanctionData.data.nodes[i].sanctions.length > 0) {
+                                                for (var k = 0; k < directSanctionData.data.nodes[i].sanctions.length; k++) {
+                                                    if (!data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate) {
+                                                        data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate = directSanctionData.data.nodes[i].sanctions[k].list + " and " + that.formatDate(directSanctionData.data.nodes[i].sanctions[k].since);
+                                                    } else {
+                                                        data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate = data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate + ", " + directSanctionData.data.nodes[i].sanctions[k].list + " and " + that.formatDate(directSanctionData.data.nodes[i].sanctions[k].since);
+                                                    }
                                                 }
+                                            } else {
+                                                data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate = "No Sanction Found";
                                             }
-                                        } else {
-                                            data.Data[0].CONTROLLING_SHAREHOLDERS[j].CSH_DirectAndDate = "No Sanction Found";
                                         }
-
-
                                     }
-
                                 }
                             }
                             oModel.setData(data.Data[0].CONTROLLING_SHAREHOLDERS);
@@ -1066,27 +1065,28 @@ sap.ui.controller("copilot.copilot", {
 
 
 
-
-                if (data.Data[0].SANCTION_BY_EXTENSION.SBE_EU_CONS_INDICATOR === true) {
-                    var Sanction1 = "Santioned";
-                    // that.getView().byId("sanction1Id").addStyleClass("highlightedTextRed");
-                } else {
-                    Sanction1 = "Not Santioned";
-                    // that.getView().byId("sanction1Id").addStyleClass("highlightedTextGreen");
-                }
-                if (data.Data[0].SANCTION_BY_EXTENSION.SBE_OFAC_SSI_INDICATOR === true) {
-                    var Sanction2 = "Santioned";
-                    // that.getView().byId("sanction2Id").addStyleClass("highlightedTextRed");
-                } else {
-                    Sanction2 = "Not Santioned";
-                    // that.getView().byId("sanction2Id").addStyleClass("highlightedTextGreen");
-                }
-                if (data.Data[0].SANCTION_BY_EXTENSION.SBE_OFAC_SDN_INDICATOR === true) {
-                    var Sanction3 = "Santioned";
-                    // that.getView().byId("sanction3Id").addStyleClass("highlightedTextRed");
-                } else {
-                    Sanction3 = "Not Santioned";
-                    // that.getView().byId("sanction3Id").addStyleClass("highlightedTextGreen");
+                if (data.Data[0].SANCTION_BY_EXTENSION) {
+                    if (data.Data[0].SANCTION_BY_EXTENSION.SBE_EU_CONS_INDICATOR === true) {
+                        var Sanction1 = "Santioned";
+                        // that.getView().byId("sanction1Id").addStyleClass("highlightedTextRed");
+                    } else {
+                        Sanction1 = "Not Santioned";
+                        // that.getView().byId("sanction1Id").addStyleClass("highlightedTextGreen");
+                    }
+                    if (data.Data[0].SANCTION_BY_EXTENSION.SBE_OFAC_SSI_INDICATOR === true) {
+                        var Sanction2 = "Santioned";
+                        // that.getView().byId("sanction2Id").addStyleClass("highlightedTextRed");
+                    } else {
+                        Sanction2 = "Not Santioned";
+                        // that.getView().byId("sanction2Id").addStyleClass("highlightedTextGreen");
+                    }
+                    if (data.Data[0].SANCTION_BY_EXTENSION.SBE_OFAC_SDN_INDICATOR === true) {
+                        var Sanction3 = "Santioned";
+                        // that.getView().byId("sanction3Id").addStyleClass("highlightedTextRed");
+                    } else {
+                        Sanction3 = "Not Santioned";
+                        // that.getView().byId("sanction3Id").addStyleClass("highlightedTextGreen");
+                    }
                 }
                 if (!data.Data[0].TRADE_REGISTER_NUMBER) {
                     data.Data[0].TRADE_REGISTER_NUMBER = "Data not available"
@@ -1483,9 +1483,9 @@ sap.ui.controller("copilot.copilot", {
         aDisplay.text = sValue;
         aDisplay.sender = this.getOwnerComponent()._UserName;
 
-        if(!this.getOwnerComponent()._bingNumber){
+        if (!this.getOwnerComponent()._bingNumber) {
             this.getOwnerComponent()._bingNumber = "1"
-        }else{
+        } else {
             this.getOwnerComponent()._bingNumber = this.getOwnerComponent()._bingNumber + 1;
         }
         aDisplay.Number = this.getOwnerComponent()._bingNumber;
@@ -1560,7 +1560,7 @@ sap.ui.controller("copilot.copilot", {
                         next: function (response) {
 
                             aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
-							aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
+                            aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
                             aDisplayText.sender = "Bing"
                             that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
