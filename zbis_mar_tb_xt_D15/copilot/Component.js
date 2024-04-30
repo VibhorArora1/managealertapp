@@ -409,7 +409,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								conversationId: response.conversationId,
 								participant: { id: response.participantId },
 								message: {
-									text: generatedValuesStr + " Answer the above question in detail with phrasing them in order of question and answer? and Result should be english Language",
+									text: generatedValuesStr + " Answer the above question in detail with phrasing them in order of question and answer? and Result should be english Language. In the end can you also provide the summary?",
 									author: "user",
 									inputMethod: "Keyboard",
 									requestId: guid,
@@ -446,6 +446,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									oFeedDisplay.FeedInput.push(aDisplayText);
 									var JSONoModelBing = new sap.ui.model.json.JSONModel(oFeedDisplay);
 									view.setModel(JSONoModelBing, "pf12");
+									sap.m.MessageToast.show("Open Search Data Successfully Loaded");
 								},
 								error: (err) => {
 									console.error("Error:", err);
