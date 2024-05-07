@@ -192,11 +192,11 @@
 
 <smartForm:SmartForm id="smartFormColumn1"
 		
-			 title="Co-Pilot"
+			 title="BIS Copilot(Moody's)"
 			validationMode="Async"
       visible="false"
 			/>
- <FeedInput id="_IDGenFeedInput1"  post="onLLM" icon="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png" class="sapUiSmallMarginTopBottom" placeholder="Ask Co-pilot" visible="false"/>
+ <FeedInput id="_IDGenFeedInput1"  post="onLLM" icon="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png" class="sapUiSmallMarginTopBottom" placeholder="Ask Copilot(Moody's)" visible="false"/>
             <List id="_IDGenList1" showSeparators="Inner" items="{pf7>/FeedInput}" visible="false">
                 <FeedListItem id="_IDGenFeedListItem1" iconDensityAware="false" info="Reply" sender="{pf7>sender}" icon="{pf7>icon}"
       text="{pf7>text}"

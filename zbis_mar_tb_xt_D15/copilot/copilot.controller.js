@@ -121,6 +121,7 @@ sap.ui.controller("copilot.copilot", {
         var that = this;
         this.getOwnerComponent()._guid = this.generateGUID();
         this.getOwnerComponent()._guid1 = this.generateGUID();
+        var bingURL = this.getOwnerComponent()._bingURL 
         $.ajax({
             url: "https://www.bingapis.com/api/v1/chat/create",
             type: "GET",
@@ -132,7 +133,7 @@ sap.ui.controller("copilot.copilot", {
                 console.log(response);
                 that.getOwnerComponent()._response = response;
                 const connection = new signalR.HubConnectionBuilder()
-                    .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+                    .withUrl(bingURL, {
                         skipNegotiation: true,
                         transport: 1,
                         withCredentials: false
@@ -1411,28 +1412,37 @@ sap.ui.controller("copilot.copilot", {
         if (sBusy) {
             this.oBusy.open();
         }
-        fetch(`https://api.openai.com/v1/chat/completions`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
-            },
-            body: JSON.stringify({
-                messages,
-                max_tokens: 500,
-                model: "gpt-3.5-turbo"
-            })
-        }).then(response => response.json())
-            .then(data => {
 
+        var endpoint = this.getOwnerComponent()._openAIURL;
+        // Define the request data
+        var requestData = {
+            messages: messages,
+            max_tokens: 500,
+            temperature: 0.7,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+            top_p: 0.95,
+            stop: null
+        };
+
+        // Define the API key
+        // var apiKey = "9b617e538ed94100ab2c079d5112db9f";
+        debugger;
+
+        // Make the AJAX request
+        $.ajax({
+            url: endpoint,
+            type: "POST",
+            contentType: "application/json",
+            headers: {
+                "api-key": API_KEY
+            },
+            data: JSON.stringify(requestData),
+            success: function (data) {
                 that.oBusy.close();
-                if (data.error) {
-                    sap.m.MessageToast.show(data.error.message);
-                    return;
-                }
                 if (sDisplayText) {
                     aDisplayText.text = data.choices[0].message.content;
-                    aDisplayText.sender = "Co-Pilot"
+                    aDisplayText.sender = "SAP BIS Copilot(Moody's)"
                     that.getOwnerComponent()._number = that.getOwnerComponent()._number + 1;
                     aDisplayText.Number = that.getOwnerComponent()._number;
                     aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
@@ -1444,18 +1454,12 @@ sap.ui.controller("copilot.copilot", {
                     oModel.setData(oFeedDisplay);
                     oView.setModel(oModel, "pf7");
                 } else {
-                    // var oModel1 = new sap.ui.model.json.JSONModel();
-                    if (data.error) {
-                        sap.m.MessageToast.show(data.error.message);
-                        return;
-                    }
                     if (!array) {
                         var aData1 = {
                             "Sanction": data.choices[0].message.content,
                         }
                         sModel.setData(aData1);
                         oView.setModel(sModel, sBindingModel);
-
                     } else {
                         oFeedDisplay = { FeedInput: [] };
                         aDisplayText.text = data.choices[0].message.content;
@@ -1466,7 +1470,74 @@ sap.ui.controller("copilot.copilot", {
                     }
 
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                that.oBusy.close();
+                console.error(xhr.responseText);
+                sap.m.MessageToast.show(xhr.responseText);
+            }
+        });
+
+
+
+
+
+        // fetch(`https://api.openai.com/v1/chat/completions`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${API_KEY}`
+        //     },
+        //     body: JSON.stringify({
+        //         messages,
+        //         max_tokens: 500,
+        //         model: "gpt-3.5-turbo"
+        //     })
+        // }).then(response => response.json())
+        //     .then(data => {
+
+        //         that.oBusy.close();
+        //         if (data.error) {
+        //             sap.m.MessageToast.show(data.error.message);
+        //             return;
+        //         }
+        //         if (sDisplayText) {
+        //             aDisplayText.text = data.choices[0].message.content;
+        //             aDisplayText.sender = "Co-Pilot"
+        //             that.getOwnerComponent()._number = that.getOwnerComponent()._number + 1;
+        //             aDisplayText.Number = that.getOwnerComponent()._number;
+        //             aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
+        //             oFeedDisplay.FeedInput.push(aDisplayText);
+        //             var oModel = new sap.ui.model.json.JSONModel();
+        //             oFeedDisplay.FeedInput.sort(function (a, b) {
+        //                 return b.Number - a.Number;
+        //             });
+        //             oModel.setData(oFeedDisplay);
+        //             oView.setModel(oModel, "pf7");
+        //         } else {
+        //             // var oModel1 = new sap.ui.model.json.JSONModel();
+        //             if (data.error) {
+        //                 sap.m.MessageToast.show(data.error.message);
+        //                 return;
+        //             }
+        //             if (!array) {
+        //                 var aData1 = {
+        //                     "Sanction": data.choices[0].message.content,
+        //                 }
+        //                 sModel.setData(aData1);
+        //                 oView.setModel(sModel, sBindingModel);
+
+        //             } else {
+        //                 oFeedDisplay = { FeedInput: [] };
+        //                 aDisplayText.text = data.choices[0].message.content;
+        //                 aDisplayText.sender = "Bot"
+        //                 oFeedDisplay.FeedInput.push(aDisplayText);
+        //                 sModel.setData(oFeedDisplay);
+        //                 oView.setModel(sModel, sBindingModel);
+        //             }
+
+        //         }
+        //     });
     },
 
     onBingSearch: function (oEvent) {
@@ -1490,7 +1561,7 @@ sap.ui.controller("copilot.copilot", {
         aDisplay.text = sValue;
         aDisplay.sender = this.getOwnerComponent()._UserName;
 
-       
+
 
         oCommentModel = this.getView().getModel("pf14");
         if (oCommentModel) {
@@ -1550,7 +1621,7 @@ sap.ui.controller("copilot.copilot", {
                 connection.on("send", initialMessage => {
                     console.log(initialMessage);
                 });
-                
+
 
                 connection.start().then(function () {
                     console.log("Connected!");
@@ -1561,7 +1632,7 @@ sap.ui.controller("copilot.copilot", {
                         },
                         next: function (response) {
                             that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
-                            aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");                           
+                            aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
                             aDisplayText.sender = "Bing"
                             aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
@@ -1671,12 +1742,17 @@ sap.ui.controller("copilot.copilot", {
                 switch (keyVal[i].ApiName) {
                     case "MODDYS":
                         var moodys = keyVal[i].KeyDecryptValue;
+                        var moodysUsername = keyVal[i].Username
+
                     case "SANCTION360":
                         this.getOwnerComponent()._sanctionTokenAPI = keyVal[i].KeyDecryptValue;
+                        this.getOwnerComponent()._sactionURL = keyVal[i].ApiUrl;
                     case "BINGAPI":
                         this.getOwnerComponent()._bingAPI = keyVal[i].KeyDecryptValue;
+                        this.getOwnerComponent()._bingURL = keyVal[i].ApiUrl;
                     case "OPENAI":
                         this.getOwnerComponent()._openAI = keyVal[i].KeyDecryptValue;
+                        this.getOwnerComponent()._openAIURL = keyVal[i].ApiUrl;
                 }
             }
             if (!this.getOwnerComponent()._sanctionTokenAPI) {
@@ -1690,7 +1766,8 @@ sap.ui.controller("copilot.copilot", {
             var password = moodys;
             // Define your authentication endpoint and credentials
             var tokenEndpoint = "https://token.hub.moodysanalytics.com/prod/auth/token";
-            var username = "vibhorarora@microsoft.com";
+            // var username = "vibhorarora@microsoft.com";
+            var username = moodysUsername;
 
             // Create a base64-encoded string of the credentials (username:password)
             var base64Credentials = btoa(username + ":" + password);

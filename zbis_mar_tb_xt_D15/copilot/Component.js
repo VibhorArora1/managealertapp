@@ -112,11 +112,13 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									for (var i = 0; i < keyVal.length; i++) {
 										if (keyVal[i].ApiName === "MODDYS") {
 											var moodys = keyVal[i].KeyDecryptValue;
+											var moodysUsername = keyVal[i].Username;											;
 											that.oBusy.close();
 
 										}
 										if (keyVal[i].ApiName === "BINGAPI") {
 											var bing = keyVal[i].KeyDecryptValue;
+											var bingURL = keyVal[i].ApiUrl;
 											that.oBusy.close();
 
 										}
@@ -135,8 +137,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 										return;
 									}
 									var tokenEndpoint = "https://token.hub.moodysanalytics.com/prod/auth/token";
-									var username = "vibhorarora@microsoft.com";
-
+									// var username = "vibhorarora@microsoft.com";
+									var username = moodysUsername;
 									var password = moodys;
 
 									// Create a base64-encoded string of the credentials (username:password)
@@ -223,7 +225,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 															}
 														});
 														console.log(generatedValues);
-														that.bingSearch(generatedValues, bing, that);
+														that.bingSearch(generatedValues, bing, that,bingURL);
 													}
 												}
 											});
@@ -348,7 +350,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				jQuery.sap.includeStyleSheet(sCssPath);
 			},
 
-			bingSearch: async function (generatedValues, pid, that) {
+			bingSearch: async function (generatedValues, pid, that, url) {
 				var guid = that.generateGUID();
 				var guid1 = that.generateGUID();
 				var aResult = [];
@@ -361,13 +363,13 @@ sap.ui.define(["sap/ui/core/UIComponent",
 						pid: guid
 					},
 					success: async function (response) {
-						that.iterationChatHub(generatedValues, that, response, guid, guid1, aResult, oResut);
+						that.iterationChatHub(generatedValues, that, response, guid, guid1, aResult, oResut, url);
 					}
 
 				});
 			},
 
-			iterationChatHub: async function (generatedValues, that, response, guid, guid1, aResult, oResut) {
+			iterationChatHub: async function (generatedValues, that, response, guid, guid1, aResult, oResut, url) {
 				var i = 0; // Initialize index variable
 				var view = that.oView;
 				var oFeedDisplay = { FeedInput: [] };
@@ -375,7 +377,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				var chatHubCallback = async function () {
 					if (i < generatedValues.length) {
 						const connection = new signalR.HubConnectionBuilder()
-							.withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+							.withUrl(url, {
 								skipNegotiation: true,
 								transport: 1,
 								// Specify the allowed origin
