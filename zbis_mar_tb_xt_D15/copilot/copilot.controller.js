@@ -33,78 +33,7 @@ sap.ui.controller("copilot.copilot", {
             // }
         });
 
-        var oData = {
-            Model1: [
-                {
-                    Question: "Does company ОАО АСБ Беларусбанк, asgd_V5_12561, Belarus exist",
-                    Answer: "According to the web search results, ОАО “АСБ Беларусбанк” is the name of the largest bank in Belarus, which offers a wide range of banking products and services to individuals, corporate clients, and financial institutions1. The bank’s legal name is Открытое акционерное общество Сберегательный банк “Беларусбанк (Open Joint Stock Company Savings Bank Belarusbank)2. The bank’s SWIFT code is AKBBBY2X2. The bank’s website is belarusbank.by."
-                },
-                {
-                    Question: "Does addess  asgd_V5_12561, Belarus exist",
-                    Answer: "I’m sorry, but I could not find any information about the address asgd_V5_12561, Belarus in the web search results. This address does not seem to be a valid format for a location in Belarus. The usual format for an address in Belarus consists of the following elements1"
-                },
-                {
-                    Question: "what is the tax number of Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia",
-                    Answer: "According to the web search results, the tax number of Успех, Курск, ул. Гоголя, д. 10 305004 Курск, Russia is 4632014030"
-                },
-                {
-                    Question: "is this valid phone number +48507863777",
-                    Answer: "According to the web search results, +48507863777 is a valid phone number in Poland."
-                }, {
-                    Question: "is this valid company registration number 1182046214 in poland?",
-                    Answer: "is this valid company registration number 1182046214 in poland"
-                }, {
-                    Question: "Is this valide web address www.ilmarinen.no",
-                    Answer: "Ilmarinen Explore No, www.ilmarinen.no is not a valid web address. It does not exist and cannot be accessed. However, www.ilmarinen.fi is a valid web address. It is the website of Ilmarinen, a Finnish company that provides pension insurance and services1"
-                }, {
-                    Question: "what company owns tax number 4629030222 in russia",
-                    Answer: "Using this tool, I found that the company that owns the tax number 4629030222 in Russia is OOO “SIBIRSKAYA ZHELEZNAYA DOROGA” (Limited Liability Company “Siberian Railway”). The company is located in Novosibirsk, and its main activity is railway passenger transport. The company was registered on December 29, 20032."
-                }
-            ]
-        };
-
-        var oModel = new sap.ui.model.json.JSONModel(oData);
-        this.getView().setModel(oModel, "Model1");
-        var oSmartForm = this.getView().byId("smartFormSearch");
-        var oSmartFormlayout = new sap.ui.comp.smartform.Layout({
-        });
-        // Create a Group control
-        var int = oModel.getData().Model1.length / 2;
-        var final = parseInt(int) + 1;
-
-        var index = 0;
-        var that = this;
-
-        oModel.getData().Model1.forEach(function (obj) {
-            index++;
-            if (index === 1) {
-
-                var oGroup = new sap.ui.comp.smartform.Group({
-                    // label: obj.Question
-                });
-                oSmartForm.addGroup(oGroup);
-                that._group = oGroup;
-            } else {
-                oGroup = that._group;
-            }
-            if (index === final) {
-                index = 0;
-            }
-
-            // Add the Group to the SmartForm
-
-
-            var oGroupElement = new sap.ui.comp.smartform.GroupElement({
-                elements: [
-                ]
-            });
-            var oText = new sap.m.Text({ text: obj.Question + ":", editable: false });
-            var oText1 = new sap.m.Text({ text: obj.Answer, editable: false });
-            oGroupElement.addElement(oText);
-            oGroupElement.addElement(oText1);
-            oGroup.addGroupElement(oGroupElement);
-        });
-
+     
 
     },
     generateGUID: function () {
@@ -1425,10 +1354,6 @@ sap.ui.controller("copilot.copilot", {
             stop: null
         };
 
-        // Define the API key
-        // var apiKey = "9b617e538ed94100ab2c079d5112db9f";
-        debugger;
-
         // Make the AJAX request
         $.ajax({
             url: endpoint,
@@ -1743,16 +1668,19 @@ sap.ui.controller("copilot.copilot", {
                     case "MODDYS":
                         var moodys = keyVal[i].KeyDecryptValue;
                         var moodysUsername = keyVal[i].Username
-
+                        break;
                     case "SANCTION360":
                         this.getOwnerComponent()._sanctionTokenAPI = keyVal[i].KeyDecryptValue;
                         this.getOwnerComponent()._sactionURL = keyVal[i].ApiUrl;
+                        break;
                     case "BINGAPI":
                         this.getOwnerComponent()._bingAPI = keyVal[i].KeyDecryptValue;
                         this.getOwnerComponent()._bingURL = keyVal[i].ApiUrl;
+                        break;
                     case "OPENAI":
                         this.getOwnerComponent()._openAI = keyVal[i].KeyDecryptValue;
                         this.getOwnerComponent()._openAIURL = keyVal[i].ApiUrl;
+                        break;
                 }
             }
             if (!this.getOwnerComponent()._sanctionTokenAPI) {
