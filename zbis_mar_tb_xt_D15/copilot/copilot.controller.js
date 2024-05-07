@@ -1367,7 +1367,7 @@ sap.ui.controller("copilot.copilot", {
                 that.oBusy.close();
                 if (sDisplayText) {
                     aDisplayText.text = data.choices[0].message.content;
-                    aDisplayText.sender = "SAP BIS Copilot(Moody's)"
+                    aDisplayText.sender = "BIS Copilot (Moody's)"
                     that.getOwnerComponent()._number = that.getOwnerComponent()._number + 1;
                     aDisplayText.Number = that.getOwnerComponent()._number;
                     aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
@@ -1558,7 +1558,7 @@ sap.ui.controller("copilot.copilot", {
                         next: function (response) {
                             that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
                             aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
-                            aDisplayText.sender = "Bing"
+                            aDisplayText.sender = "BIS Copilot (Open Media)"
                             aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
                             aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
