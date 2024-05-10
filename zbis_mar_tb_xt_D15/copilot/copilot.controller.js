@@ -1474,6 +1474,7 @@ sap.ui.controller("copilot.copilot", {
         var aDisplayText = {};
         var that = this;
         var oView = this.getView();
+        var bingURL = this.getOwnerComponent()._bingURL 
         if (!this.getOwnerComponent()._bingNumber) {
             this.getOwnerComponent()._bingNumber = "1"
         } else {
@@ -1510,7 +1511,7 @@ sap.ui.controller("copilot.copilot", {
                 console.log(response);
                 that.getOwnerComponent()._response = response;
                 const connection = new signalR.HubConnectionBuilder()
-                    .withUrl("https://sydney.bing.com/Sydney-test/ChatHub", {
+                    .withUrl(bingURL, {
                         skipNegotiation: true,
                         transport: 1,
                         withCredentials: false
