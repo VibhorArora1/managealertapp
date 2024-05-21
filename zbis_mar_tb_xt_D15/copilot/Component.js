@@ -463,8 +463,8 @@ sap.ui.define(["sap/ui/core/UIComponent",
 											return url ? `<a href="${url}" target="_blank">${match}</a>` : match;
 										});
 									}
-									var cleanedString = aDisplayText.text.replace(/\[.*\]: https:\/\/[^\s]+ ""/g, "").trim();
-									var finalString = replacePlaceholdersWithLinks(cleanedString, urlMap);
+									// var cleanedString = aDisplayText.text.replace(/\[.*\]: https:\/\/[^\s]+ ""/g, "").trim();
+									var finalString = replacePlaceholdersWithLinks(aDisplayText.text, urlMap);
 									aDisplayText.text = finalString;
 									aDisplayText.sender = "Bot"
 									oFeedDisplay.FeedInput.push(aDisplayText);

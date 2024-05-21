@@ -1579,8 +1579,8 @@ sap.ui.controller("copilot.copilot", {
                                     return url ? `<a href="${url}" target="_blank">${match}</a>` : match;
                                 });
                             }
-                            var cleanedString = aDisplayText.text.replace(/\[.*\]: https:\/\/[^\s]+ ""/g, "").trim();
-                            var finalString = replacePlaceholdersWithLinks(cleanedString, urlMap);
+                            // var cleanedString = aDisplayText.text.replace(/\[.*\]: https:\/\/[^\s]+ ""/g, "").trim();
+                            var finalString = replacePlaceholdersWithLinks(aDisplayText.text, urlMap);
                             aDisplayText.text = finalString;
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
                             aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
