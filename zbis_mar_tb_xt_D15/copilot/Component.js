@@ -372,6 +372,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 			iterationChatHub: async function (generatedValues, that, response, guid, guid1, aResult, oResut, url) {
 				var i = 0; // Initialize index variable
 				var view = that.oView;
+				var Updresponse = {};
 				var oFeedDisplay = { FeedInput: [] };
 									var aDisplayText = {};
 				var chatHubCallback = async function () {
@@ -426,7 +427,9 @@ sap.ui.define(["sap/ui/core/UIComponent",
 							connection.on("Update", (response) => {
 								if (response.messages?.length) {
 									// console.log("Upd message:", response.messages[0]);
-									aDisplayText.text = response.messages[0].text
+									// aDisplayText.text = response.messages[0].text
+									Updresponse = response;
+									
 								}
 							});
 							await connection.stream("Chat", initialMessage).subscribe({
@@ -441,6 +444,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 
 								},
 								next: function (response) {
+									aDisplayText.text = Updresponse.messages[0].adaptiveCards[0].body[0].text;
 									aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
 									// response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "");
 									aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");				

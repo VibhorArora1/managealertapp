@@ -1472,6 +1472,7 @@ sap.ui.controller("copilot.copilot", {
         var oFeedDisplay = { FeedInput: [] };
         var aDisplay = {};
         var aDisplayText = {};
+        var updResponse = {};
         var that = this;
         var oView = this.getView();
         var bingURL = this.getOwnerComponent()._bingURL 
@@ -1542,6 +1543,7 @@ sap.ui.controller("copilot.copilot", {
                     if (response.messages?.length) {
                         // console.log("Upd message:", response.messages[0]);
                         aDisplayText.text = response.messages[0].text
+                        updResponse = response;
                     }
                 });
                 connection.on("send", initialMessage => {
@@ -1558,6 +1560,7 @@ sap.ui.controller("copilot.copilot", {
                         },
                         next: function (response) {
                             that.getOwnerComponent()._bingNumber = that.getOwnerComponent()._bingNumber + 1;
+                            aDisplayText.text = updResponse.messages[0].adaptiveCards[0].body[0].text;
                             aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
                             aDisplayText.sender = "BIS Copilot (Open Media)"
                             aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
