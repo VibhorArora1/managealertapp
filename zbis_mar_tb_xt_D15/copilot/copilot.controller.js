@@ -33,7 +33,7 @@ sap.ui.controller("copilot.copilot", {
             // }
         });
 
-     
+
 
     },
     generateGUID: function () {
@@ -50,7 +50,7 @@ sap.ui.controller("copilot.copilot", {
         var that = this;
         this.getOwnerComponent()._guid = this.generateGUID();
         this.getOwnerComponent()._guid1 = this.generateGUID();
-        var bingURL = this.getOwnerComponent()._bingURL 
+        var bingURL = this.getOwnerComponent()._bingURL
         $.ajax({
             url: "https://www.bingapis.com/api/v1/chat/create",
             type: "GET",
@@ -1475,7 +1475,7 @@ sap.ui.controller("copilot.copilot", {
         var updResponse = {};
         var that = this;
         var oView = this.getView();
-        var bingURL = this.getOwnerComponent()._bingURL 
+        var bingURL = this.getOwnerComponent()._bingURL
         if (!this.getOwnerComponent()._bingNumber) {
             this.getOwnerComponent()._bingNumber = "1"
         } else {
@@ -1564,6 +1564,24 @@ sap.ui.controller("copilot.copilot", {
                             aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
                             aDisplayText.sender = "BIS Copilot (Open Media)"
                             aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
+                            const urls = aDisplayText.text.match(/\[(\d+)\]: (https?:\/\/\S+)/g);
+                            const urlMap = {};
+                            if (urls) {
+                                urls.forEach((url) => {
+                                    const [ref, href] = url.split(": ");
+                                    const index = ref.match(/\[(\d+)\]/)[1];
+                                    urlMap[index] = href.replace(/"/g, "");
+                                });
+                            }
+                            function replacePlaceholdersWithLinks(text, links) {
+                                return text.replace(/\[(\d+)\]/g, function (match, p1) {
+                                    var url = links[p1];
+                                    return url ? `<a href="${url}" target="_blank">${match}</a>` : match;
+                                });
+                            }
+                            var cleanedString = aDisplayText.text.replace(/\[.*\]: https:\/\/[^\s]+ ""/g, "").trim();
+                            var finalString = replacePlaceholdersWithLinks(cleanedString, urlMap);
+                            aDisplayText.text = finalString;
                             aDisplayText.Number = that.getOwnerComponent()._bingNumber;
                             aDisplayText.icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Microsoft_365_Copilot_Icon.svg/1024px-Microsoft_365_Copilot_Icon.svg.png";
                             oFeedDisplay.FeedInput.push(aDisplayText);

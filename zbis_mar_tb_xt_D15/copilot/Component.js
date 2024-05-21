@@ -112,7 +112,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									for (var i = 0; i < keyVal.length; i++) {
 										if (keyVal[i].ApiName === "MODDYS") {
 											var moodys = keyVal[i].KeyDecryptValue;
-											var moodysUsername = keyVal[i].Username;											;
+											var moodysUsername = keyVal[i].Username;;
 											that.oBusy.close();
 
 										}
@@ -225,7 +225,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 															}
 														});
 														console.log(generatedValues);
-														that.bingSearch(generatedValues, bing, that,bingURL);
+														that.bingSearch(generatedValues, bing, that, bingURL);
 													}
 												}
 											});
@@ -374,7 +374,7 @@ sap.ui.define(["sap/ui/core/UIComponent",
 				var view = that.oView;
 				var Updresponse = {};
 				var oFeedDisplay = { FeedInput: [] };
-									var aDisplayText = {};
+				var aDisplayText = {};
 				var chatHubCallback = async function () {
 					if (i < generatedValues.length) {
 						const connection = new signalR.HubConnectionBuilder()
@@ -422,14 +422,14 @@ sap.ui.define(["sap/ui/core/UIComponent",
 								},
 								optionSets: ['stream_writes', 'flux_prompt_v1'],
 							};
-							
+
 
 							connection.on("Update", (response) => {
 								if (response.messages?.length) {
 									// console.log("Upd message:", response.messages[0]);
 									// aDisplayText.text = response.messages[0].text
 									Updresponse = response;
-									
+
 								}
 							});
 							await connection.stream("Chat", initialMessage).subscribe({
@@ -447,7 +447,25 @@ sap.ui.define(["sap/ui/core/UIComponent",
 									aDisplayText.text = Updresponse.messages[0].adaptiveCards[0].body[0].text;
 									aDisplayText.text = aDisplayText.text.replace(/\*\*(.*?)\*\*/gm, "<strong>$1</strong>");
 									// response.result.message = response.result.message.replace(/\*\*(.*?)\*\*/gm, "");
-									aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");				
+									aDisplayText.text = aDisplayText.text.replace(/\[\^\d+\^\]/g, "");
+									const urls = aDisplayText.text.match(/\[(\d+)\]: (https?:\/\/\S+)/g);
+									const urlMap = {};
+									if (urls) {
+										urls.forEach((url) => {
+											const [ref, href] = url.split(": ");
+											const index = ref.match(/\[(\d+)\]/)[1];
+											urlMap[index] = href.replace(/"/g, "");
+										});
+									}
+									function replacePlaceholdersWithLinks(text, links) {
+										return text.replace(/\[(\d+)\]/g, function (match, p1) {
+											var url = links[p1];
+											return url ? `<a href="${url}" target="_blank">${match}</a>` : match;
+										});
+									}
+									var cleanedString = aDisplayText.text.replace(/\[.*\]: https:\/\/[^\s]+ ""/g, "").trim();
+									var finalString = replacePlaceholdersWithLinks(cleanedString, urlMap);
+									aDisplayText.text = finalString;
 									aDisplayText.sender = "Bot"
 									oFeedDisplay.FeedInput.push(aDisplayText);
 									var JSONoModelBing = new sap.ui.model.json.JSONModel(oFeedDisplay);
